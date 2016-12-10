@@ -1,0 +1,87 @@
+---
+layout: post
+status: publish
+published: true
+title: Underestimated Amazon S3
+author:
+  display_name: Niclas Meier
+  login: niclas
+  email: mail@niclas-meier.de
+  url: http://www.niclas-meier.de
+author_login: niclas
+author_email: mail@niclas-meier.de
+author_url: http://www.niclas-meier.de
+excerpt: "The <a href=\"http:&#47;&#47;aws.amazon.com&#47;de&#47;s3&#47;\">Amazon
+  Simple Storage Service (S3)<&#47;a> is the big data work horse of Amazon and one
+  of the corner stones of their cloud infrastructure. For our recent <a href=\"http:&#47;&#47;itunes.apple.com&#47;de&#47;app&#47;em-hero-2012&#47;id530513702?l=de&amp;ls=1&amp;mt=8\">project<&#47;a>
+  we received a considerable amount of game data from our data provider. At the moment
+  these file are stored in the <a href=\"http:&#47;&#47;www.mongodb.org&#47;display&#47;DOCS&#47;GridFS\">GridFS<&#47;a>
+  of our Mongo DB installation, but once the data is processed we don't really need
+  these files any more, except for development or archiving purposes.\r\n\r\nAt the
+  moment we are using the <a href=\"http:&#47;&#47;aws.amazon.com&#47;en&#47;ec2&#47;\">Amazon
+  Elastic Compute Cloud (EC2)<&#47;a> to run our infrastructure, so it was a logical
+  choice to evaluate the <a href=\"http:&#47;&#47;aws.amazon.com&#47;en&#47;s3&#47;\">S3<&#47;a>
+  to store the received game data and I have to confess I was really underestimating
+  this service as simple file system."
+wordpress_id: 177
+wordpress_url: http://www.niclas-meier.de/?p=177
+date: '2012-07-10 21:02:49 +0200'
+date_gmt: '2012-07-10 20:02:49 +0200'
+categories:
+- Clojure
+- Amazon S3
+tags: []
+comments: []
+---
+<p>The <a href="http:&#47;&#47;aws.amazon.com&#47;de&#47;s3&#47;">Amazon Simple Storage Service (S3)<&#47;a> is the big data work horse of Amazon and one of the corner stones of their cloud infrastructure. For our recent <a href="http:&#47;&#47;itunes.apple.com&#47;de&#47;app&#47;em-hero-2012&#47;id530513702?l=de&amp;ls=1&amp;mt=8">project<&#47;a> we received a considerable amount of game data from our data provider. At the moment these file are stored in the <a href="http:&#47;&#47;www.mongodb.org&#47;display&#47;DOCS&#47;GridFS">GridFS<&#47;a> of our Mongo DB installation, but once the data is processed we don't really need these files any more, except for development or archiving purposes.</p>
+<p>At the moment we are using the <a href="http:&#47;&#47;aws.amazon.com&#47;en&#47;ec2&#47;">Amazon Elastic Compute Cloud (EC2)<&#47;a> to run our infrastructure, so it was a logical choice to evaluate the <a href="http:&#47;&#47;aws.amazon.com&#47;en&#47;s3&#47;">S3<&#47;a> to store the received game data and I have to confess I was really underestimating this service as simple file system.<a id="more"></a><a id="more-177"></a><br />
+<h3>Reliability<&#47;h3><br />
+First of all, I wasn't really aware that S3 has this high reliability of 99.999999999 percent according to the Amazon website. Which is more than enough for our needs. An guaranteed uptime of 99.99 percent is equivalent to max 52.56 minutes of downtime per year, but I am sure that we can't &#47; don't want to build a system which offers equal values. You can also lower the cost of you S3 usage by choosing the reduced redundancy service which reduces the reliability of 99.99 percent, which is good enough e.g. for <a href="http:&#47;&#47;aws.amazon.com&#47;en&#47;elasticmapreduce&#47;">elastic map reduce<&#47;a> usage.</p>
+<p>To ensure a safe transmission of the data you can also specify a MD5 sum of the content you are storing into S3 to make sure that you have no errors while transferring the data.</p>
+<h3>Expiration<&#47;h3><br />
+A very nice feature of S3 is that you can set expiration dates or rules for objects. E.g. we receive commentary data from out sports data provider to enrich our content. This content is nice but also automatically generated so we don't really need to store it. In S3 we have now the possibility to delete these files automatically after 90 days (or something like this).</p>
+<h3>Meta-data<&#47;h3><br />
+You may associate meta data as key value pairs to any S3 object you store. These meta data is also transferred as HTTP header with <code>x-amz-meta-<&#47;code> prefix. So there is no need for additional <code>.md5<&#47;code> and <code>.meta<&#47;code> files. We will use this to store some game and data transfer related meta data to the files. The data transfer meta data is a map of several keys and values. As a lithe trick I am storing this additional data as JSON object.</p>
+<h3>Versioning<&#47;h3><br />
+This is a big one. You can configure the S3 buckets - which are a kind of root file system on S3 - to store the files versioned. So you are able to get any previous version of an object like on <a href="http:&#47;&#47;git-scm.com&#47;">git<&#47;a> or <a href="http:&#47;&#47;subversion.apache.org&#47;">Subversion<&#47;a>.</p>
+<p>This is perfect for our needs. We receive for data files like <code>commentary-3-2011-426847-de.xml<&#47;code> which contain all comments for a football (european not american) game. We are receiving a file with this name a couple of times during the game containing the complete data (updates and old data).</p>
+<p>Using GridFS and <a href="http:&#47;&#47;www.mongodb.org">MongoDB<&#47;a> we are already keeping multiple versions of the file and it's great to see, that we are able to store multiple versions in S3 too without auxiliary arrangements. </p>
+<h3>Java SDK and Clojure<&#47;h3><br />
+At the moment we are using the Java SDK from Amazon with a slim Clojure wrapper. This works very well and<br />
+you can easily wrap the S3 calls into a couple of Clojure functions like this:</p>
+<pre>
+(defn create-folder [client bucket-name key ]<br />
+  "Creates an S3 folder"<br />
+  (when (and client bucket-name key)<br />
+    (let [req (PutObjectRequest. bucket-name (if (.endsWith key folder-extension) key (str key folder-extension)) empty-content empty-content-meta)<br />
+          req (if acl (.withCannedAcl req acl) req)<br />
+          req (if listener (.withProgressListener req listener) req)]<br />
+      (.putObject client req))))<br />
+<&#47;pre></p>
+<p>Just create request instance (e.g. <code>PutObjectRequest<&#47;code>) and chain the continuation style <code>.with<&#47;code> Methods. The named arguments are a big help here. A little more work is to convert the result objects of the S3 API into Clojure style datatypes. </p>
+<pre>
+(defn list-objects [client bucket-name ]<br />
+  "Lists the objects in a bucket."<br />
+  (when (and client bucket-name)<br />
+    (let [r (.listObjects client (ListObjectsRequest. bucket-name prefix marker delimiter max-keys))]<br />
+      (letfn [(summaries [s] (lazy-seq (if-let [n (first s)] (cons (coerce-s3-object-summary n) (summaries (rest s))) nil)))]<br />
+        (-&amp;gt; (transient {})<br />
+          (assoc-if! :bucket-name (.getBucketName r))<br />
+          (assoc-if! :prefix (.getPrefix r))<br />
+          (assoc-if! :marker (.getMarker r))<br />
+          (assoc-if! :max-keys (.getMaxKeys r))<br />
+          (assoc-if! :delimiter (.getDelimiter r))<br />
+          (assoc-if! :truncated (.isTruncated r))<br />
+          (assoc-if! :common-prefixes (when-let [p (.getCommonPrefixes r)] (when-not (empty? p) p)))<br />
+          (assoc-if! :next-marker (.getNextMarker r))<br />
+          (assoc-if!&amp;nbsp;:object-summaries (when-let [s (.getObjectSummaries r)] (summaries s)))<br />
+          persistent!)))))<br />
+<&#47;pre></p>
+<p>But most of it is just repetitive work, but in the your Clojure code this looks really nice.</p>
+<pre>
+(list-objcts c "my-fancy-bucket" :prefix "foo")<br />
+<&#47;pre></p>
+<h3>Conculsions<&#47;h3><br />
+I didn't talk about some matters of course like access control, multiple APIs based on REST or SOAP available in Java, .NET or Ruby. Or other nice functions like uploading data as anonymous user on pre-signed  URLs. But from my perspective this package is more than enough to keep a close look on the <a href="http:&#47;&#47;aws.amazon.com&#47;de&#47;s3&#47;">Simple Storage Service<&#47;a>. I am pretty sure that the <a href="https:&#47;&#47;developers.google.com&#47;drive&#47;">equivalent Google Service<&#47;a> has similar capabilities, so both services should be considered if you want to store some of your data in the cloud.</p>
+<p>Another important question, many of the european&#47;german users will ask: "Where will my data be stored?" - Amazon will guarantee that, if you use the EU-Ireland zone the data will remain in the EU. This sounds great, even from the data protection point of view, but remember the fact that the european Amazon (Amazon EU S.&agrave;.r.l) is a owned to hundred percent by the US Amazon. So if the Department of Homeland Security want's a DVD with all of you data, I am pretty confident that they will get it.</p>
+<p>In the end, I am more than ever convinced that S3 is a very useful tool and I am exited to continue to work with it.</p>

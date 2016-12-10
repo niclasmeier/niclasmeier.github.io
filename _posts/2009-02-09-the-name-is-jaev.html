@@ -1,0 +1,41 @@
+---
+layout: post
+status: publish
+published: true
+title: The name is jaev &#8230;
+author:
+  display_name: Niclas Meier
+  login: niclas
+  email: mail@niclas-meier.de
+  url: http://www.niclas-meier.de
+author_login: niclas
+author_email: mail@niclas-meier.de
+author_url: http://www.niclas-meier.de
+excerpt: |
+  The name of who&#47;what is jaev? The jaev framework is my first open source project! Jepp, I joined the community and giving something back after years of using the frameworks of other people.
+
+  What does jaev do? The name jaev is the abbreviation for <i>ja<&#47;i>va (<i>a<&#47;i>dvanced) <i>e<&#47;i>mail <i>v<&#47;i>alidation. So the framework does validate e-mails. Sounds quite boring, isn't it? Of course not!
+wordpress_id: 20
+wordpress_url: http://nicl.net/2009/02/09/the-name-is-jaev/
+date: '2009-02-09 23:52:38 +0100'
+date_gmt: '2009-02-09 21:52:38 +0100'
+categories:
+- Adobe Flex
+- Java
+- Tapestry
+- jaev
+tags: []
+comments: []
+---
+<p>The name of who&#47;what is jaev? The jaev framework is my first open source project! Jepp, I joined the community and giving something back after years of using the frameworks of other people.</p>
+<p>What does jaev do? The name jaev is the abbreviation for <i>ja<&#47;i>va (<i>a<&#47;i>dvanced) <i>e<&#47;i>mail <i>v<&#47;i>alidation. So the framework does validate e-mails. Sounds quite boring, isn't it? Of course not!<br />
+<a id="more"></a><a id="more-20"></a><br />
+The name of who&#47;what is <a href="http:&#47;&#47;code.google.com&#47;p&#47;jaev&#47;">jaev<&#47;a>? The <a href="http:&#47;&#47;code.google.com&#47;p&#47;jaev&#47;">jaev framework<&#47;a> is my first open source project! Jepp, I joined the community and giving something back after years of using the frameworks of other people.</p>
+<p>What does jaev do? The name <a href="http:&#47;&#47;code.google.com&#47;p&#47;jaev&#47;">jaev<&#47;a> is the abbreviation for <i>ja<&#47;i>va (<i>a<&#47;i>dvanced) <i>e<&#47;i>mail <i>v<&#47;i>alidation. So the framework does validate e-mails. Sounds quite boring, isn't it? Of course not! There are some quite good tools for e-mail validation like the one in the <a href="http:&#47;&#47;commons.apache.org&#47;validator&#47;">Apache commons validator<&#47;a> project (I <i>"borrowed"<&#47;i> some test cases there). But the e-mail validation in java was quite shallow. If you want to have a more advanced validation, i.e. of the domain, you'll had to do it yourself. The <a href="http:&#47;&#47;code.google.com&#47;p&#47;jaev&#47;">jaev framework<&#47;a> tries to fill this gap.</p>
+<p>It provides facilities to validate the syntax of an e-mail address with including addresses with names like <code>Niclas Meier <niclas.meier@example.com><&#47;code>  (I confess the handling of comments in e-mail addresses has still some flaws, but it's not so important I guess). This is obligatory but the <a href="http:&#47;&#47;code.google.com&#47;p&#47;jaev&#47;">jaev framework<&#47;a> offers quite more.</p>
+<p>With the <a href="http:&#47;&#47;code.google.com&#47;p&#47;jaev&#47;">jaev framework<&#47;a> you'll may check the domain of the e-mail address. The framework uses a local (or server) copy of the IANA top level domain database (<a href="http:&#47;&#47;data.iana.org&#47;TLD&#47;tlds-alpha-by-domain.txt">http:&#47;&#47;data.iana.org&#47;TLD&#47;tlds-alpha-by-domain.txt<&#47;a>) to validate the top level domain. If the top level domain is okay  the DNS database will be queries if the domain exists and has <code>MX<&#47;code> entries. If a domain has no <code>MX<&#47;code> entries you'll have to assume that you will could not relay an e-mail message to the e-mail address. The mail server uses the same mechanism.</p>
+<p>A very important feature of the <a href="http:&#47;&#47;code.google.com&#47;p&#47;jaev&#47;">jaev framework<&#47;a> is: You have the choice! You are receiving a <code>Result<&#47;code> object as outcome of the validation process. The <code>Result<&#47;code> contains a code, which specifies the details, and a validity level which specifies  the level of validity of an e-mail address. I.e. <code>SYNTAX<&#47;code> suggests that an e-mail address is syntactically valid but the domain and account may be invalid. The maximum validity is <code>ACCESSIBLE<&#47;code>. With <code>ACCESSIBLE<&#47;code> validity the <a href="http:&#47;&#47;code.google.com&#47;p&#47;jaev&#47;">jaev framework<&#47;a> was able to verify the existence and accessibility of the e-mail address on the <a href="http:&#47;&#47;de.wikipedia.org&#47;wiki&#47;Mail_Transfer_Agent">MTA<&#47;a> of the e-mail domain.</p>
+<p>This is the last big feature of the <a href="http:&#47;&#47;code.google.com&#47;p&#47;jaev&#47;">jaev framework<&#47;a>. The framework can connect to the <a href="http:&#47;&#47;de.wikipedia.org&#47;wiki&#47;Mail_Transfer_Agent">MTA<&#47;a> specified in the MX entry of the domain and tries to send an e-mail to the e-mail address. If the mail transfer can be initiated the framework will abort the process, no mail will be send, but we can assure that the e-mail account exits.</p>
+<p>Around the three step validation mechanism the framework offers quite simple and extendible construction and configuration mechanisms, examples for JSF, Tapestry 5 and Flex &amp; BlazeD and different acceptance strategies. Timeouts may be applied on different levels and operations, so you can assure that you'll get a <code>Result<&#47;code> in a defined amount of time.</p>
+<p>I think this is quite a handy package. And I spent lots of my spare time the last four weeks to bring this to life. Maybe someone out there agrees with me and uses the framework in his application.</p>
+<p>If you encounter some problems or you would like to contribute&#47;request some features you may post them to the <a href="http:&#47;&#47;groups.google.com&#47;group&#47;jaev-users?pli=1">google group<&#47;a> or to the <a href="http:&#47;&#47;code.google.com&#47;p&#47;jaev&#47;issues&#47;list">issue management system<&#47;a>. Maybe there is someone out there who is firm in <a href="http:&#47;&#47;www.antlr.org&#47;">ANTLR<&#47;a> which the jeav framework uses for e-mail parsing.</p>

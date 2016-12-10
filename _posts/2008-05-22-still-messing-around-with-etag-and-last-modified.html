@@ -1,0 +1,78 @@
+---
+layout: post
+status: publish
+published: true
+title: Still messing around with &#8220;ETag&#8221; and &#8220;Last-Modified&#8221;
+author:
+  display_name: Niclas Meier
+  login: niclas
+  email: mail@niclas-meier.de
+  url: http://www.niclas-meier.de
+author_login: niclas
+author_email: mail@niclas-meier.de
+author_url: http://www.niclas-meier.de
+excerpt: |+
+  Stating with this whole website performance an ETag topic opened pandoras box. It's a real mess and lame compromises all over the place. But I have to admit that the whole thing is not as easy as I expected it to be.
+
+  Anyway ... today I had a nice discussion with a colleague about this topic. He's a senior front-end developer. This means he is a real pro in HTML, CSS, Java-Script and stuff like this and he's the one who showed me the whole <a href="http:&#47;&#47;developer.yahoo.com&#47;performance" target="_blank">Yahoo! performance stuff<&#47;a>. After this discussion I wanted to check some things out in detail.
+
+
+wordpress_id: 9
+wordpress_url: http://nicl.net/2008/05/22/still-messing-around-with-etag-and-last-modified/
+date: '2008-05-22 21:15:50 +0200'
+date_gmt: '2008-05-22 19:15:50 +0200'
+categories:
+- Apache
+- HTTP
+- Tomcat
+- Web 2.0
+tags: []
+comments: []
+---
+<p>Stating with this whole website performance an ETag topic opened pandoras box. It's a real mess and lame compromises all over the place. But I have to admit that the whole thing is not as easy as I expected it to be.</p>
+<p>Anyway ... today I had a nice discussion with a colleague about this topic. He's a senior front-end developer. This means he is a real pro in HTML, CSS, Java-Script and stuff like this and he's the one who showed me the whole <a href="http:&#47;&#47;developer.yahoo.com&#47;performance" target="_blank">Yahoo! performance stuff<&#47;a>. After this discussion I wanted to check some things out in detail.</p>
+<p><a id="more"></a><a id="more-9"></a></p>
+<p>Stating with this whole website performance an ETag topic opened pandoras box. It's a real mess and lame compromises all over the place. But I have to admit that the whole thing is not as easy as I expected it to be.</p>
+<p>Anyway ... today I had a nice discussion with a colleague about this topic. He's a senior front-end developer. This means he is a real pro in HTML, CSS, Java-Script and stuff like this and he's the one who showed me the whole <a href="http:&#47;&#47;developer.yahoo.com&#47;performance" target="_blank">Yahoo! performance stuff<&#47;a>. After this discussion I wanted to check some things out in detail.</p>
+<p>First I wanted to check if the Apache was sending two different ETags if you have to Apache web servers delivering the content of a website. A simple test with <code>wget<&#47;code> verified it:</p>
+<pre>
+wget --no-dns-cache -S http:&#47;&#47;www.a-domain.de&#47;flash&#47;ballons_main.swf<br />
+--09:14:26--  http:&#47;&#47;www.a-domain.de&#47;flash&#47;ballons_main.swf<br />
+           => `ballons_main.swf'<br />
+Resolving www.a-domain.de... 84.xxx.xxx.x17, 84.xxx.xxx.x33<br />
+Connecting to www.a-domain.de|84.xxx.xxx.x17|:80... connected.<br />
+HTTP request sent, awaiting response...<br />
+  HTTP&#47;1.1 200 OK<br />
+  Date: Thu, 22 May 2008 07:14:26 GMT<br />
+  Last-Modified: Tue, 20 May 2008 15:49:24 GMT<br />
+  ETag: "1041e6-7b2c8-6c9fc900"<br />
+  Accept-Ranges: bytes<br />
+  Content-Length: 504520<br />
+  Keep-Alive: timeout=15, max=45<br />
+  Connection: Keep-Alive<br />
+  Content-Type: application&#47;x-shockwave-flash<br />
+Length: 504,520 (493K) [application&#47;x-shockwave-flash]<br />
+<&#47;pre><br />
+When requesting the first web server the ETag "1041e6-7b2c8-6c9fc900" war returned ...</p>
+<pre>
+wget --no-dns-cache -S http:&#47;&#47;www.a-domain.de&#47;flash&#47;ballons_main.swf<br />
+--09:14:26--  http:&#47;&#47;www.a-domain.de&#47;flash&#47;ballons_main.swf<br />
+           => `ballons_main.swf'<br />
+Resolving www.a-domain.de... 84.xxx.xxx.x17, 84.xxx.xxx.x33<br />
+Connecting to www.a-domain.de|84.xxx.xxx.x33|:80... connected.<br />
+HTTP request sent, awaiting response...<br />
+  HTTP&#47;1.1 200 OK<br />
+  Date: Thu, 22 May 2008 07:14:26 GMT<br />
+  Last-Modified: Tue, 20 May 2008 15:49:24 GMT<br />
+  ETag: "b824e-7b2c8-6c9fc900"<br />
+  Accept-Ranges: bytes<br />
+  Content-Length: 504520<br />
+  Keep-Alive: timeout=15, max=45<br />
+  Connection: Keep-Alive<br />
+  Content-Type: application&#47;x-shockwave-flash<br />
+Length: 504,520 (493K) [application&#47;x-shockwave-flash]<br />
+<&#47;pre></p>
+<p>... after requesting the second web server the ETag "b824e-7b2c8-6c9fc900". So if you do not disable the INode usage for the ETag calculation the whole mechanism will not work. But does this really matter. As you can see the DNS caching was disabled for the test. In a real life situation the DNS caching we be activated and my browser will talk only to one web server and the INode issue won't matter at all.<br />
+But if we have multiple web server and the internet browser will only talk to one of them, why do I need the ETag? The Last-Modified header will be enough, won't it?</p>
+<p>So my conclusion is use either the Last-Modifed header or the ETag header but using both header makes no really sense at all. This should be right in any case for the Apache HTTPD, the Microsoft IIS or any other web server delivering static content. I also recommend using the Last-Modified because the ETag calculation requires more computing time. There is only one scenario I can provide where the ETag will work and the Last-Modifed Header will not. If someone is changing content and does not modify the last modified time stamp. But this should be rather uncommon.</p>
+<p>But how is the situation at dynamic content creation? My favorite web framework is Java Servlets and all related technologies (JSP, JSF, Tapestry, and so on) and after that very disappointing chapter with the ETag I decided to take a closer look at the facilities the servlet and JSP APIs are offering. Another sad very sad story at my actual point of view right now. But for tonight it is enough. Later more about it ...</p>

@@ -1,0 +1,122 @@
+---
+layout: post
+status: publish
+published: true
+title: Bootstrapping EC2 servers with Puppet
+author:
+  display_name: Niclas Meier
+  login: niclas
+  email: mail@niclas-meier.de
+  url: http://www.niclas-meier.de
+author_login: niclas
+author_email: mail@niclas-meier.de
+author_url: http://www.niclas-meier.de
+excerpt: |-
+  At <a href="http:&#47;&#47;herolabs.com">HEROLABS<&#47;a> we are doing sports &#47; gaming apps and one inherent characteristic is, that you have load peaks around the games. I guess having load peaks is characteristic to for most gaming apps. If we take a look at your EMHERO2012 app we had most server traffic during the time the German national Football team played and almost no traffic in between.
+
+  What we wanted to do: Scale up our server capacity around periods of increased load and scale down the rest of the time. To achieve this, we chose the Amazon (AWS) cloud as deployment environment and an automated server deployment process. To shed some light on the result already, after some a hard work and steep learning curve, it works ;-)
+wordpress_id: 185
+wordpress_url: http://www.niclas-meier.de/?p=185
+date: '2013-02-10 20:28:26 +0100'
+date_gmt: '2013-02-10 19:28:26 +0100'
+categories:
+- Technology
+- Clojure
+- Amazon EC2
+- Amazon AWS
+- Puppet
+tags: []
+comments:
+- id: 4313
+  author: Ted McFadden
+  author_email: tm.75.4073@gmail.com
+  author_url: ''
+  date: '2013-02-11 08:51:15 +0100'
+  date_gmt: '2013-02-11 07:51:15 +0100'
+  content: Any specific reasons for the switch from Pallet or was Puppet just a better
+    fit for your setup?
+- id: 4315
+  author: Abhishek
+  author_email: abhishek.amberkar@gmail.com
+  author_url: ''
+  date: '2013-02-11 14:20:45 +0100'
+  date_gmt: '2013-02-11 13:20:45 +0100'
+  content: I would like to know why exactly you switched from Pallet to Puppet.
+- id: 4363
+  author: Niclas Meier
+  author_email: mail@niclas-meier.de
+  author_url: http://www.niclas-meier.de
+  date: '2013-02-25 16:14:02 +0100'
+  date_gmt: '2013-02-25 15:14:02 +0100'
+  content: "There where some reasons why we switched from Pallet to Puppet.\r\n\r\n<em>a)
+    Larger Community<&#47;em> - You don't have to invent everything by yourself.\r\n<em>b)
+    No command-and-control server<&#47;em> - Using Pallet you need a server to run
+    your program&#47;crates on. If you wan't to converge multiple host groups in parallel
+    you'll have to do it by yourself.\r\n<em>c) Declarative Model and deltas<&#47;em>
+    - Pallet checks every resource if a it has to be changed to get for the new state
+    and applies only the necessary changes. This is a real timesaver, because pallet
+    always does everything.\r\n<em>d) Templating<&#47;em> - In Puppet you use ERB
+    templates which is quite simple. In Pallet you use (exec-script ..) or even more
+    basic (format ...) which can be very error prone.\r\n<em>e) Better execution model<&#47;em>
+    - In Puppet you define which class&#47;resouce depends on any other resource.
+    In Pallet you have two choices <code>lift<&#47;code> or <code>converge<&#47;code>
+    and these <code>post-*<&#47;code> phases, but they never woked for me. I had some
+    really nasty issues with the Pallet phase model and things like adding Nodes to
+    Munin and stuff like that. Never found a suitable phase.\r\n\r\nThere was some
+    other minor stuff but in the end sticking to a language was not worth all the
+    additional issues."
+---
+<p>At <a href="http:&#47;&#47;herolabs.com">HEROLABS<&#47;a> we are doing sports &#47; gaming apps and one inherent characteristic is, that you have load peaks around the games. I guess having load peaks is characteristic to for most gaming apps. If we take a look at your EMHERO2012 app we had most server traffic during the time the German national Football team played and almost no traffic in between.</p>
+<p>What we wanted to do: Scale up our server capacity around periods of increased load and scale down the rest of the time. To achieve this, we chose the Amazon (AWS) cloud as deployment environment and an automated server deployment process. To shed some light on the result already, after some a hard work and steep learning curve, it works ;-)<a id="more"></a><a id="more-185"></a>Okay here is how we did it: The first thing you need is a (metaphorically) unlimited amount of servers to rent, which should be available in a very short time (minutes). This is the job of the EC2 cloud in our scenario. That is the easy part, if you have a credit card.</p>
+<p>Now you have rented an almost blank server, except of the operating system. We chose Ubuntu (12.04 LTS - Precise Pangolin) as server operating system which is quite well documented and maintained for use in the EC2 cloud.</p>
+<p>The hard parts are now:</p>
+<ul>
+<li>automate the installation process of the software you need<&#47;li>
+<li>add the right configuration files to your server<&#47;li>
+<li>add the system to your cluster<&#47;li><br />
+<&#47;ul></p>
+<p>At the moment there are several products&#47;projects for deployment automation &#47; configuration management. The most known are <a href="http:&#47;&#47;www.opscode.com&#47;chef&#47;">Chef<&#47;a> from <a href="http:&#47;&#47;www.opscode.com">Opscode<&#47;a> and <a href="https:&#47;&#47;puppetlabs.com&#47;puppet&#47;what-is-puppet&#47;">Puppet<&#47;a> from <a href="https:&#47;&#47;puppetlabs.com">Puppetlabs<&#47;a>. Due to the fact that we are using <a href="http:&#47;&#47;clojure.org">Clojure<&#47;a> we first started with <a href="http:&#47;&#47;palletops.com">Pallet<&#47;a>, but we changed to Puppet this year and it started to work out well for us.</p>
+<p>In general you can divide these systems in two groups. One group is like a SSH shell on steroids: You script what needs to be done on the server and the tools does it in parallel on all the hosts you want. The other group defines the state you want the servers in and the the transition steps you need to do. And every node tries to to get into the state you defined. Chef and Pallet are more fitting into the first group and Puppet into the second.</p>
+<p>The first step for me was to define the state and transitions for our backend server installation. To run our backend server we need Java, Leiningen and our Software package (cloned from <a href="https:&#47;&#47;github.com">GitHub<&#47;a>).</p>
+<p>A nice about thing on Puppet is, that you don't need any special programming skills. You define classes in so called manifest files which define the dependencies and actions you want to take. If you understand how Puppet works you get really fast into it. E.g. if you want Java installed you simply say:</p>
+<pre>
+  package {'openjdk-7-jdk':<br />
+    ensure => present,<br />
+  }<br />
+<&#47;pre><br />
+and Puppet will install the JDK on the next run.</p>
+<p>Maybe a quick word how Puppet works. Puppet has two major part: A Puppetmaster, which is a central server with all state information, and a Puppet Agent which runs on each node. The Puppet Agent runs in a fixed interval and compares the state from the Puppetmaster with the local state. If these state are not identical it will try to adjust the local state to match the required state.</p>
+<p>To create the Manifests was not very hard. We had some special issues with some SSH keys, GitHub and the local non-privileged user. But this was more about my lack of knowledge in these things. But I learned a lot (e.g. to write <a href="http:&#47;&#47;upstart.ubuntu.com">Upstart<&#47;a> scripts) about creating a server environment. I guess it's always hard when you know what you should do, but you don't known how to get there. But let me assure you that I took me only 2-3 days to create the automatic setup of our Clojure backend server (including setup of a Puppetmaster, etc.), starting by near zero.</p>
+<p>One major obstacle was how Puppet defines the state of a server. Normally you find a manifest file on the Puppetmaster (e.g. <code>site.pp<&#47;code>) which defines the classes a server should contain. This looks like:</p>
+<pre>
+# &#47;etc&#47;puppetlabs&#47;puppet&#47;manifests&#47;site.pp<br />
+node 'www1.example.com' {<br />
+  include common<br />
+  include apache<br />
+  include squid<br />
+}<br />
+<&#47;pre><br />
+Nice for a small website, not so good in a cloud, when you don't really know the names of your server. But Puppet has a great mechanism to solve our problems. It's called <a href="http:&#47;&#47;docs.puppetlabs.com&#47;guides&#47;external_nodes.html">External Node Classifiers (ENC)<&#47;a>. How does this work? Instead of using the manifest data Puppet called an external program which returns the node classification as YAML. Great and simple solution.</p>
+<p>After some googling I stumbled across a nice <a href="http:&#47;&#47;engineering.gowalla.com&#47;2011&#47;10&#47;21&#47;puppet&#47;">blog post<&#47;a> by <a href="https:&#47;&#47;github.com&#47;lordkev">Kevin Lord<&#47;a> on the Gowalla engineering blog, which helped a lot. So I decided to write my own ENC which you can find <a href="https:&#47;&#47;github.com&#47;niclasmeier&#47;puppet-ec2-enc">here<&#47;a>. It's basically the same solution, but my version takes more than one security group into account and also merges the EC2 tags into the <code>parameter<&#47;code> section of the result. Which comes handy e.g. when you want to activate special services only on one server.</p>
+<p>So we are now almost done on the automatic installation part. So when we start Puppet on a new host the Puppetmaster will figure out this is a productive backend server and install all the software we need on the on the server. Unfortunately there a no standard AMIs with Puppet pre-installed and I sure don't want any standard AMI with our Puppetmaster address too. A first idea was to create an AMI with Puppet and our Puppetmaster pre-installed, but for an initial version we wanted to be able to use standard AMI.</p>
+<p>The solution was a so-called <a href="http:&#47;&#47;alestic.com&#47;2009&#47;06&#47;ec2-user-data-scripts"><code>user-data<&#47;code> script<&#47;a>. This is a mechanism that works on the EC2 Ubuntu images. The <code>user-data<&#47;code> script is a script which executed on instance startup and can be passed as a parameter on the Amazon EC2 API call.</p>
+<p>With a suitable <code>user-data<&#47;code> script starting new instances looks like this:</p>
+<pre>
+ec2-run-instances -k my-ec2-key -n 1 --user-data-file <a href="https:&#47;&#47;github.com&#47;niclasmeier&#47;puppet-ec2-enc&#47;blob&#47;master&#47;install-puppet.sh">install-puppet.sh<&#47;a> -g backend-productive -t m1.small ami-960f03e2<br />
+<&#47;pre><br />
+Our script does nothing more than adding the Puppetlabs <code>apt<&#47;code> repository, installs the newest version of Puppet and writes a very basic <code>puppet.conf<&#47;code> file. Fortunately Puppet is also managed by Puppet, so the <code>puppet.conf<&#47;code> will be adjusted later. The <code>-g backend-productive<&#47;code> selects the security group of the server and determines what to install.</p>
+<p>As a matter of fact we don't use the command line to start servers. Our admin tool as a button to start servers and uses the Amazon EC2 API directly to spawn new instances if needed.</p>
+<p>Having a server installed is great, but worth nothing if you don't get any traffic on the system. For our new product we use the Amazon <a href="http:&#47;&#47;aws.amazon.com&#47;en&#47;elasticloadbalancing&#47;">elastic load balancer<&#47;a> (ELB). This makes the task somewhat easy.</p>
+<p>The solution I chose was to create a <a href="https:&#47;&#47;github.com&#47;niclasmeier&#47;puppet-ec2-enc&#47;blob&#47;master&#47;register_at_elb.rb">small script<&#47;a> that registers the instance to the ELB (using the ELB web service interface). </p>
+<p>This script is part of the installation manifest for the backend server and a simple <code>exec<&#47;code>:</p>
+<pre>
+exec {'register_at_api_elb':<br />
+  command   => "${api::params::scripts_dir}&#47;register_at_elb.rb ${ec2_instance_id} ${loadbalancer_name} && touch &#47;var&#47;run&#47;register_at_api_elb.lock",<br />
+  creates   => '&#47;var&#47;run&#47;register_at_api_elb.lock',<br />
+  logoutput => on_failure,<br />
+  require   => Class['api::install'],<br />
+}<br />
+<&#47;pre><br />
+To prevent the multiple registration the script is succeeded by a touch on a lock file. The <code>exec<&#47;code> will only performed by Puppet only if the lock file does not exists.</p>
+<p>Some closing words: I love DevOps. Programming on your infrastructure is nice and opens a lot of opportunities. In my former jobs I worked with some great SysAdmins. This on hone hand helps very much, but can be a burden sometimes. Especially when you don't known enough about the tools you want&#47;have to use.</p>
+<p>To give you a better perspective. All our servers use Puppet right now, but some of them (e.g. the databases) are not able to autoscale (yet ;-) ).</p>

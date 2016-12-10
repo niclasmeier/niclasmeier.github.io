@@ -1,0 +1,71 @@
+---
+layout: post
+status: publish
+published: true
+title: Mavenizing a Flex build
+author:
+  display_name: Niclas Meier
+  login: niclas
+  email: mail@niclas-meier.de
+  url: http://www.niclas-meier.de
+author_login: niclas
+author_email: mail@niclas-meier.de
+author_url: http://www.niclas-meier.de
+excerpt: |
+  In the last week the release 1.0 platform release of <a href"http:&#47;&#47;www.scoyo.de">scoyo<&#47;a> came close and we were tying up some loose ends. One of these ends was the integration of the scoyo Flash&#47;Flex portal build process  into the platform build process.
+
+  The platform build process is realized with <a href="http:&#47;&#47;maven.apache.org">Apache Maven<&#47;a>, which is, in humble my opinion, still the first choice for <a href="http:&#47;&#47;java.sun.com">Java<&#47;a> based software projects, but integrating other project types into maven is a kind of challenging due to the nature of Maven. You may summarize this in: If you do it the maven way it's very easy, if you don't it is up to you ...
+
+  Luckily there was already an existing build with <a href="http:&#47;&#47;ant.apache.org">Ant<&#47;a> and a dysfunctional Maven variant with the Maven <a href="http:&#47;&#47;code.google.com&#47;p&#47;flex-mojos&#47;">Flex-mojos<&#47;a> plugin. So it stated  my journey to insanity an back ...
+wordpress_id: 23
+wordpress_url: http://nicl.net/2009/03/21/mavenizing-a-flex-build/
+date: '2009-03-21 14:54:51 +0100'
+date_gmt: '2009-03-21 12:54:51 +0100'
+categories:
+- Adobe Flash
+- Adobe Flex
+- Flex-mojo
+- Java
+- Maven
+tags: []
+comments: []
+---
+<p>In the last week the release 1.0 platform release of <a href"http:&#47;&#47;www.scoyo.de">scoyo<&#47;a> came close and we were tying up some loose ends. One of these ends was the integration of the scoyo Flash&#47;Flex portal build process  into the platform build process.</p>
+<p>The platform build process is realized with <a href="http:&#47;&#47;maven.apache.org">Apache Maven<&#47;a>, which is, in humble my opinion, still the first choice for <a href="http:&#47;&#47;java.sun.com">Java<&#47;a> based software projects, but integrating other project types into maven is a kind of challenging due to the nature of Maven. You may summarize this in: If you do it the maven way it's very easy, if you don't it is up to you ...</p>
+<p>Luckily there was already an existing build with <a href="http:&#47;&#47;ant.apache.org">Ant<&#47;a> and a dysfunctional Maven variant with the Maven <a href="http:&#47;&#47;code.google.com&#47;p&#47;flex-mojos&#47;">Flex-mojos<&#47;a> plugin. So it stated  my journey to insanity an back ...<br />
+<a id="more"></a><a id="more-23"></a><br />
+In the last week the release 1.0 platform release of <a href"http:&#47;&#47;www.scoyo.de">scoyo<&#47;a> came close and we were tying up some loose ends. One of these ends was the integration of the scoyo Flash&#47;Flex portal build process  into the platform build process.</p>
+<p>The platform build process is realized with <a href="http:&#47;&#47;maven.apache.org">Apache Maven<&#47;a>, which is, in humble my opinion, still the first choice for <a href="http:&#47;&#47;java.sun.com">Java<&#47;a> based software projects, but integrating other project types into maven is a kind of challenging due to the nature of Maven. You may summarize this in: If you do it the maven way it's very easy, if you don't it is up to you ...</p>
+<p>Luckily there was already an existing build with <a href="http:&#47;&#47;ant.apache.org">Ant<&#47;a> and a dysfunctional Maven variant with the Maven <a href="http:&#47;&#47;code.google.com&#47;p&#47;flex-mojos&#47;">Flex-mojos<&#47;a> plugin. So it stated  my journey to insanity an back.</p>
+<p>My first attempts started  with reactivating the Flex-mojos maven build. I already had some experience with Flex-mojos when preparing the build for the <a href="http:&#47;&#47;jaev.googlecode.com">jaev<&#47;a> Flex example. This example Project for the <a href="http:&#47;&#47;jaev.googlecode.com">jaev<&#47;a> framework also uses the Flex-mojos maven plugin to create the example <code>.swf<&#47;code> and uses the infrastructure of maven to assemble the web application with the HTML and the <a href="http:&#47;&#47;opensource.adobe.com&#47;wiki&#47;display&#47;blazeds&#47;BlazeDS&#47;">BlazeDS<&#47;a> services. Took me some time and a quite nice <a href="http:&#47;&#47;sebastien-arbogast.com&#47;2008&#47;04&#47;10&#47;flex-spring-and-blazeds-the-full-stack&#47;">tutorial<&#47;a> from <a href="http:&#47;&#47;sebastien-arbogast.com&#47;">S&eacute;bastien Arbogast<&#47;a> but finally it worked!</p>
+<p>So I thought I was prepared for the task and nothing could stop me. There is no law against being wrong, at least in Germany <code>;-)<&#47;code>.</p>
+<p>The main problems was finding all the required libraries in various maven repositories. Additionally there were some foul libraries. Some yahoo uploaded HTML files as <code>.pom<&#47;code> and <code>.jar<&#47;code> file in a repository. It took me quite a moment to realize this. Unfortunately the current <a href="http:&#47;&#47;www.adobe.com&#47;products&#47;flex&#47;flexdownloads&#47;">Flex SDK 3.3<&#47;a> was not available at all in any maven repository. At least I did not find any.</p>
+<p>So after wasting some hours I changed the strategy: My new Idea was to call the Flex <a href="http:&#47;&#47;livedocs.adobe.com&#47;flex&#47;3&#47;html&#47;help.html?content=anttasks_1.html">Ant tasks<&#47;a> provided by <a href="http:&#47;&#47;www.adobe.com">Adobe<&#47;a> from the maven build using the <a href="http:&#47;&#47;maven.apache.org&#47;plugins&#47;maven-antrun-plugin&#47;">maven-antrun-plugin<&#47;a>. The antrun-plugin is quite nice if you have to perform some tasks not covered by maven. So you can execute some <a href="http:&#47;&#47;ant.apache.org">Ant<&#47;a><a> tasks to enrich your build.</p>
+<p>But things where going to be worse. A couple of very "unsatisfying" hours later I discovered a bug or incompatibility of the maven <&#47;a><a href="http:&#47;&#47;maven.apache.org&#47;plugins&#47;maven-antrun-plugin&#47;">maven-antrun-plugin<&#47;a> and the Adobe <a href="http:&#47;&#47;livedocs.adobe.com&#47;flex&#47;3&#47;html&#47;help.html?content=anttasks_1.html">Ant tasks<&#47;a>. So it was time to rethink my strategy again. Should I switch back to the Flex-mojo approach? I went for a minor adjustment first: Instead of using the the <a href="http:&#47;&#47;livedocs.adobe.com&#47;flex&#47;3&#47;html&#47;help.html?content=anttasks_1.html">Ant tasks<&#47;a> I went for the compilers (<code>mxmlc<&#47;code> for Flex applications and <code>compc<&#47;code> for Flex libraries) directly. Calling them with the Ant <a href="http:&#47;&#47;ant.apache.org&#47;manual&#47;CoreTasks&#47;exec.html"><code><exec &#47;><&#47;code><&#47;a> task, which executes a command on the command line. Then use the <a href="http:&#47;&#47;maven.apache.org&#47;plugins&#47;maven-assembly-plugin&#47;">maven-assembly-plugin<&#47;a> to create a ZIP file of the compiled artifact and install&#47;deploy it into the repository.</p>
+<p>Let's sum this up:
+<ol>
+<li>start JVM and execute maven<&#47;li>
+<li>execute the maven-antrun-plugin to execute ant tasks<&#47;li>
+<li>use some Ant tasks to assemble the Flex build path (external and included libraries)<&#47;li>
+<li>use the Ant <code><exec &#47;><&#47;code> task to execute the flex compiler (let's share a secret: The Flex compilers are written in Java. Welcome back home <code>;-)<&#47;code>)<&#47;li>
+<li>use the maven-assembly-plugin<&#47;li> to create a ZIP file
+<li>install the ZIP file into the local repository<&#47;li>
+<li>(optionally deploy the artifact into a remote repository)<&#47;li><br />
+<&#47;ol></p>
+<p>That does not sound like a simple build process. And let me amend something: If you a using shared libraries in the build (yepp we have a couple of them) you may add another step before invoking the maven-antrun plugin. You'll have to use the maven dependency plugin to copy and uncompress the libraries from the local (remote) repository to your build environment, so they can be accessed&#47;found by the build. You'll imagine I was not satisfied at all with this build variant ...</p>
+<p>Again my old friend came along, the question:"What to do?"</p>
+<p>The Flex-mojo approach obliged my to upload the whole Flex SDK into our local <a href="http:&#47;&#47;archiva.apache.org&#47;">archiva<&#47;a> installation which hosts out company maven repository. This includes the minimum 54 libraries supplied by the Flex SDK. Okay most of them are quite common, but when a new Flex SDK is released (which happens on a quite regular basis) you'll have to recheck all dependencies. No thanks ...<br />
+The maven&#47;Ant&#47;Flex compiler variant emerged as juggernaut with bad performance and a loads of catches. No improvement at all ...</p>
+<p>So I decided to take a closer look at the Flex-mojo plugin itself. Why do I need to have all this dependencies? The major advantages to the Flex-mojo plugin are the special packaging types <code>swf<&#47;code> and <code>swc<&#47;code> for Flash movies and libraries. Using this packaging types maven will use a special life cycle and offer the possibility to install&#47;deploy the artifacts directly into the repository. To my relief only a <a href="http:&#47;&#47;svn.sonatype.org&#47;flexmojos&#47;trunk&#47;flexmojos-maven-plugin&#47;src&#47;main&#47;resources&#47;META-INF&#47;plexus&#47;components.xml">quite simple XML file<&#47;a> (a plexus component definition) was necessary to achieve this.</p>
+<p>So desperate as I was, I decided to write a maven plugin on my own. I must confess it was not my first time. I already wrote a simple maven plugin for the <a href="http:&#47;&#47;www.sinnerschrader.de">SinnerSchrader commerce framework<&#47;a>, a library developed by my former employer. I really do not like to reinvent software on my own. But I was curious and I want to give it a shot. My goal was to combine the two approaches I tried before and use the best of both. So the plugin should be able to manage the <code>swc<&#47;code> dependencies, the flex compiler configuration (via <code>-load-config<&#47;code>) and the direct deployment of <code>swc<&#47;code> and <code>swf<&#47;code> artifacts.</p>
+<p>The approach was simple:
+<ol>
+<li>check the maven dependencies for libraries to reference or to include<&#47;li>
+<li>check for a configured compiler configuration<&#47;li>
+<li>create the compiler command line and all options like <code>-load-config<&#47;code>, <code>-compile.debug<&#47;code>, <code>-compiler.include-libraries<&#47;code> or <code>-compiler.external-library-path<&#47;code>, etc. <&#47;li>
+<li>invoke the compiler via the<a href="http:&#47;&#47;java.sun.com&#47;j2se&#47;1.5.0&#47;docs&#47;api&#47;java&#47;lang&#47;ProcessBuilder.html"><code>java.lang.ProcessBuilder<&#47;code><&#47;a><&#47;li>
+<li>install the artifact into the local repository<&#47;li><br />
+<&#47;ol><br />
+It took me not an hour to build a working proof of concept and only approx. four more hours to mavenize almost the entire build. This was really fun after two days of trying and failing. There are still some minor adjustments to make on monday, but I am really looking forward to finish the build. And if all works out as I want, there might be a 15-20% speed improvements for a complete build. But this also reduces the necessity to perform complete builds, because some shared libraries are rarely changing at all, so we can deploy them into our company maven repository.</p>
+<p>As I went to bed last night, I was wondering why the Flex-mojo approach failed and the home-grown maven plugin approach succeeded. Under the shower this morning it was quite obvious to me. The Flex-mojo plugin stores the whole Flex SDK in maven repositories, so you don't even have to download the Flex SDK to compile your Flex application. My home-grown plugin needs the Flex SDK installed on the build computer and the <code>FLEX_HOME<&#47;code> environment variable set. But that is okay, because the <a href="http:&#47;&#47;maven.apache.org&#47;plugins&#47;maven-compiler-plugin&#47;">maven-compiler-plugin<&#47;a> does the same. It does not work without the <code>JAVA_HOME<&#47;code> set and it does not try to deploy the Java SDK into maven repositories. Maybe the Flex-mojo guys will also realize the difference. It seems to be a quite nice piece of software but with too much unnecessary complexity and very "clustered" documentation.</p>
+<p>After tying up this loose end me and a very experienced Flex development colleague already discovered some further TODOs relating to the maven and <a href="http:&#47;&#47;www.adobe.com&#47;products&#47;flex&#47;features&#47;flex_builder">Flex Builder<&#47;a> integration. There is still lots of work to do, so I am exited. My <a href="http:&#47;&#47;www.scoyo.de">new job<&#47;a> is different as I expected but a am very confident that it will offer some exiting further challenges for me ...</p>

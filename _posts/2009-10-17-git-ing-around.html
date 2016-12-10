@@ -1,0 +1,45 @@
+---
+layout: post
+status: publish
+published: true
+title: git-ing around
+author:
+  display_name: admin
+  login: admin
+  email: admin@niclas-meier.de
+  url: ''
+author_login: admin
+author_email: admin@niclas-meier.de
+excerpt: |-
+  The last weeks I had some spare time to play around with the <a href="http:&#47;&#47;www.git-scm.com">Git<&#47;a> source control management system. My interest was aroused by a vote on the <a href="http:&#47;&#47;tapestry.apache.org">Apache Tapestry<&#47;a> mailing list to migrate the <a href="http:&#47;&#47;tapestry.apache.org">Tapestry<&#47;a> <a href="http:&#47;&#47;subversion.tigris.org&#47;">Subversion<&#47;a> repository into a <a href="http:&#47;&#47;www.git-scm.com">Git<&#47;a> repository.
+
+  After a little more than a glimpse into the capabilities of <a href="http:&#47;&#47;www.git-scm.com">Git<&#47;a> I am quite impressed!
+wordpress_id: 47
+wordpress_url: http://nicl.net/?p=47
+date: '2009-10-17 10:24:56 +0200'
+date_gmt: '2009-10-17 09:24:56 +0200'
+categories:
+- Agile software development
+- Git
+- SCM
+- Subversion
+tags: []
+comments: []
+---
+<p>The last weeks I had some spare time to play around with the <a href="http:&#47;&#47;www.git-scm.com">Git<&#47;a> source control management system. My interest was aroused by a vote on the <a href="http:&#47;&#47;tapestry.apache.org">Apache Tapestry<&#47;a> mailing list to migrate the <a href="http:&#47;&#47;tapestry.apache.org">Tapestry<&#47;a> <a href="http:&#47;&#47;subversion.tigris.org&#47;">Subversion<&#47;a> repository into a <a href="http:&#47;&#47;www.git-scm.com">Git<&#47;a> repository.</p>
+<p>After a little more than a glimpse into the capabilities of <a href="http:&#47;&#47;www.git-scm.com">Git<&#47;a> I am quite impressed!<a id="more"></a><a id="more-47"></a>I think I have a quite common background in source code management systems (SCM). I started with CVS at <a href="http:&#47;&#47;www.fh-wedel.de">university<&#47;a> and I really hated it. On my <a href="http:&#47;&#47;www.sinnerschrader.de">first job<&#47;a> I continued with CVS and started to value a good source code management system.</p>
+<p>When you are working with a bunch of guys on a large Java&#47;HTML project you can't work without a SCM system. CVS was a good system with some quite nice GUI clients like the <a href="http:&#47;&#47;www.eclipse.org">Eclipse<&#47;a> CVS plugin or <a href="http:&#47;&#47;www.wincvs.org">WinCVS<&#47;a>.</p>
+<p>I am not quite aware when, but it was 2004-2005 I initiated a project to update the SCM infrastructure to <a href="http:&#47;&#47;subversion.tigris.org&#47;">Subversion<&#47;a> to address some problems with CVS. If you ever created a major release tag on CVS you'll know what I mean ;-)<br />
+In my opinion <a href="http:&#47;&#47;subversion.tigris.org&#47;">Subversion<&#47;a> is more than a worthy successor to CVS but it has it's own weaknesses.</p>
+<p>The greatest weakness is the lack of branches and tags as an additional dimension in the SCM model. This makes at least branching with <a href="http:&#47;&#47;subversion.tigris.org&#47;">SVN<&#47;a> not a very nice task. Tracking the changes of files through branches or tags is not that easy, because <a href="http:&#47;&#47;subversion.tigris.org&#47;">SVN<&#47;a> simulates a branch&#47;tag in the file structure.<br />
+On my <a href="http:&#47;&#47;www.scoyo.de">current job<&#47;a> we came across some special <a href="http:&#47;&#47;subversion.tigris.org&#47;">SVN<&#47;a> related problem. <a href="http:&#47;&#47;subversion.tigris.org&#47;">SVN<&#47;a> uses the HTTP protocol for communication between <a href="http:&#47;&#47;subversion.tigris.org&#47;">SVN<&#47;a> client and server. This solves al lot of network related issues, because HTTP is a well known and wide spread protocol. But creates a some new ones. So the synchronization of the working copy can some time, especially for for large binary assets and&#47;or large projects.</p>
+<p>But let me emphasize that <a href="http:&#47;&#47;subversion.tigris.org&#47;">SVN<&#47;a> is a great SCM system with very well tool support (<a href="http:&#47;&#47;www.eclipse.org">Eclipse<&#47;a>, <a href="http:&#47;&#47;tortoisesvn.tigris.org&#47;">TortoiseSVN<&#47;a>, etc.) and a large community. So let's stop <a href="http:&#47;&#47;subversion.tigris.org&#47;">SVN<&#47;a> "bashing" and start with the real topic.</p>
+<p><a href="http:&#47;&#47;www.git-scm.com">Git<&#47;a> is a relatively new SCM system. It was started in April 2005 by <a href="http:&#47;&#47;torvalds-family.blogspot.com">Linus Torvalds<&#47;a>. It was created due to the change in license of <a href="http:&#47;&#47;www.bitkeeper.com">Bit Keeper<&#47;a>, so that the linux kernel developers have no longer access to the SCM system.</p>
+<p>The main difference between Git and SVN is, that SVN (like CVS) has a centralized model and Git has a decentralized model. What does this mean? In the SVN world you have one (central) repository which keeps track of all versions. In the Git world you have a local repository which can pull or push versioning data with other (remote) repositories. This has some fancy effects on the Git SCM system:</p>
+<p>One thing that puzzled me most during my switch form CVS to SVN was the change in the version number. CVS provides for each file a version number (e.g. <code>1.1<&#47;code>, <code>1.3.4<&#47;code>, etc.) but SVN uses a version number for the whole repository (e.g. <code>47382<&#47;code>). This works only because the is one leading instance (repository). Git does not have this central instance so the Version number is a SHA1 id (e.g. <code>f4d267c9374da99c95222a95e203dab6c15a499<&#47;code>). I guess you noticed the difference too ;-) But this is necessary because you cannot tell which version (number) this other guy half the way around the world created a moment ago. The version is also provided for a defined set of changes when committed. The version tracks the parent version and so you can build a version tree. This this is quite different the the linear model of SVN, where the version number is an integer.</p>
+<p>Another effect of the design is, that there is more emphasis on branching and merging. So the Git provides a lost more support for this tasks. Like <code>git stash<&#47;code> which pushes the changes on the working copy into a local branch and restores the <code>HEAD<&#47;code>. This is quite nice, if you want to store your work to e.g. fix an urgent problem. Of course you can easily create a new named branch of your stashed changes. Needless to say that merging is quite easy in the Git world. Git also provides a good visualization of the different branches and commits. This makes cherry picking quite easy.</p>
+<p>Since I am playing around with Git, I realized how SVN is conceptually weak in branching and merging. A <a href="http:&#47;&#47;software.thomasjacob.de">former colleague<&#47;a> mentioned this already in 2004 when the migration at my <a href="http:&#47;&#47;www.sinnerschrader.de">former employer<&#47;a> started. I think I understand him now ;-)</p>
+<p>Another nice feature of Git is that you can fetch versioning informations of SVN. So if you have a central SVN repository, you can push and pull version to this repository and keep track of you local work&#47;changes in Git.</p>
+<p>Last topic for this blog entry (yeah, all good things must come to an end ;-) ) is the Git tool support. Git is a quite nice command line tool. But sometimes I am quite lazy so I want a GUI tool as well. <a href="http:&#47;&#47;www.eclipse.org">Eclipse<&#47;a> is mandatory for any competitor in the SCM game. Let me mention some real surprise: The <a href="http:&#47;&#47;www.eclipse.org&#47;egit&#47;">EGit<&#47;a> Eclipse plugin is the first SCM eclipse plugin (I came across) which could move and rename files and keep track of the version history!<br />
+Of course there are various tools for all kind of platforms (e.g. <a href="http:&#47;&#47;gitx.frim.nl&#47;">GitX<&#47;a>, <a href="http:&#47;&#47;code.google.com&#47;p&#47;tortoisegit&#47;">TortoiseGit<&#47;a> or <a href="http:&#47;&#47;sourceforge.net&#47;projects&#47;qgit">qgit<&#47;a>).</p>
+<p>I guess, I will keep an eye on Git  ...</p>

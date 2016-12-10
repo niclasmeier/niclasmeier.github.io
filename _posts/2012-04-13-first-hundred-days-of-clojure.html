@@ -1,0 +1,323 @@
+---
+layout: post
+status: publish
+published: true
+title: First hundred days of Clojure
+author:
+  display_name: admin
+  login: admin
+  email: admin@niclas-meier.de
+  url: ''
+author_login: admin
+author_email: admin@niclas-meier.de
+excerpt: "In politics you have a one hundred days period of grace. In December I started
+  to work with <a href=\"http:&#47;&#47;www.clojure.org\">Clojure<&#47;a>, so I guess
+  it's time to have a clojure look. \r\n\r\nIn the last couple of years I encountered
+  a couple of different languages. At <a href=\"http:&#47;&#47;www.scoyo.de\">scoyo<&#47;a>
+  it was <a href=\"http:&#47;&#47;www.adobe.com&#47;devnet&#47;actionscript.html\">ActionScript<&#47;a>
+  and <a href=\"http:&#47;&#47;flex.org&#47;\">Flex<&#47;a> from Adobe. I had the
+  honor to lead a team of great engineers, but with good people you don't get close
+  enough to the real stuff. At <a href=\"http:&#47;&#47;www.gamigo.de\">gamigo<&#47;a>
+  the new technology was <a href=\"http:&#47;&#47;www.php.net\">PHP<&#47;a>. But for
+  the last thirteen years <a href=\"http:&#47;&#47;www.java.com&#47;\">Java<&#47;a>
+  was always a big part of my career..."
+wordpress_id: 139
+wordpress_url: http://www.niclas-meier.de/?p=139
+date: '2012-04-13 22:05:02 +0200'
+date_gmt: '2012-04-13 21:05:02 +0200'
+categories:
+- Clojure
+tags: []
+comments:
+- id: 4001
+  author: Andreas Steffan
+  author_email: a.steffan@contentreich.de
+  author_url: http://www.contentreich.de
+  date: '2012-04-14 11:50:57 +0200'
+  date_gmt: '2012-04-14 10:50:57 +0200'
+  content: "Hi Niclas,\r\n\r\njust like you, I am also trying to make sense of clojure
+    - mostly by embedding it in a java based application so I can interactively mess
+    with the application using the repl.\r\n\r\nWhat I personally like most about
+    it is the fact that it is clojure is real fun for a developer. Functional interactive&#47;repl
+    based development is fun - and even productive. Fun of course is not important
+    for an employer in the first place, but fun is motivating people and motivation
+    matters. Enthusiastic communities are imho fairly rare - the ruby&#47;rails guys
+    me be another example.\r\n\r\nYou are writing about tooling and complain about
+    the lack of debugging support. But you are not telling us which tools you use
+    to write code &#47; debug.\r\n\r\nDid you try emacs with all the goodness from
+    technomancy and swank-ctd\r\n?\r\n\r\ncheers\r\nAndreas"
+- id: 4002
+  author: Niclas Meier
+  author_email: mail@niclas-meier.de
+  author_url: http://www.niclas-meier.de
+  date: '2012-04-14 15:23:53 +0200'
+  date_gmt: '2012-04-14 14:23:53 +0200'
+  content: "Hi Andreas,\r\n\r\nat the moment I am working with IDEA and the LaClojure
+    plugin. Which works pretty well. Emacs and swank-ctd are still on my to do list
+    but maybe I should try it out. I had great fun starting with Emacs and Java in
+    1999 ;-)\r\n\r\nREPL is also a great tool and I love it to work on my functions
+    from REPL until they to want I want, then add some further unit tests and wire
+    the while stuff to you web services."
+- id: 4018
+  author: Nikhil Prabhakar (@_nipra)
+  author_email: prabhakar.nikhil@gmail.com
+  author_url: ''
+  date: '2012-04-17 11:59:41 +0200'
+  date_gmt: '2012-04-17 10:59:41 +0200'
+  content: s&#47;Rick Hickey&#47;Rich Hickey :-)
+- id: 4019
+  author: Niclas Meier
+  author_email: mail@niclas-meier.de
+  author_url: http://www.niclas-meier.de
+  date: '2012-04-17 12:58:45 +0200'
+  date_gmt: '2012-04-17 11:58:45 +0200'
+  content: Whaah! Copy &amp; paste is not always your friend. Where did the 'k' came
+    from ?!?
+- id: 4021
+  author: Marco Lazzeri
+  author_email: mail@marcolazzeri.it
+  author_url: ''
+  date: '2012-04-17 14:40:38 +0200'
+  date_gmt: '2012-04-17 13:40:38 +0200'
+  content: "Interesting post, thanks for sharing!\r\n\r\nMy experience with Clojure
+    up to now is very positive, although I have to agree with you that the missing
+    support for documenting data structures is a big problem. Hopefully it will be
+    added soon."
+- id: 4022
+  author: Julian Morrison
+  author_email: julian.morrison@gmail.com
+  author_url: ''
+  date: '2012-04-17 14:57:39 +0200'
+  date_gmt: '2012-04-17 13:57:39 +0200'
+  content: If you want dependency injection, use (binding) and vars.
+- id: 4023
+  author: Pit
+  author_email: ymiquel@ymail.com
+  author_url: http://www.pytania.biz
+  date: '2012-04-17 15:20:11 +0200'
+  date_gmt: '2012-04-17 14:20:11 +0200'
+  content: Can the Clojure be used as a web programming language?
+- id: 4024
+  author: Niclas Meier
+  author_email: mail@niclas-meier.de
+  author_url: http://www.niclas-meier.de
+  date: '2012-04-17 15:35:46 +0200'
+  date_gmt: '2012-04-17 14:35:46 +0200'
+  content: "Hi Julian,\r\n\r\nunfortunately (binding ...) and Vars are working on
+    a per thread basis, so re-binding things like a database collection during my
+    noir server won't solve the problem. An I really don't want to manually initialize
+    any namespace from from during server startup. \r\n\r\nMaybe you have a small
+    example?\r\n\r\nRegards\r\nNiclas"
+- id: 4025
+  author: Niclas Meier
+  author_email: mail@niclas-meier.de
+  author_url: http://www.niclas-meier.de
+  date: '2012-04-17 15:36:35 +0200'
+  date_gmt: '2012-04-17 14:36:35 +0200'
+  content: Hi Pit, try out <a href="http:&#47;&#47;webnoir.org&#47;" rel="nofollow">Noir<&#47;a>.
+    It works very well.
+- id: 4026
+  author: gudesh
+  author_email: gudesh.yott@googlemail.com
+  author_url: ''
+  date: '2012-04-17 16:07:39 +0200'
+  date_gmt: '2012-04-17 15:07:39 +0200'
+  content: "Caution: your example of the \"for\" form has 2 errors. Here is my tested
+    version:\r\n\r\n(for [i (range 1 100) :let [f (format \"%03d\" i)] :when (odd?
+    i)] (println f))\r\n\r\nNevertheless, good article for converting newbies !"
+- id: 4027
+  author: Niclas Meier
+  author_email: mail@niclas-meier.de
+  author_url: http://www.niclas-meier.de
+  date: '2012-04-17 16:23:39 +0200'
+  date_gmt: '2012-04-17 15:23:39 +0200'
+  content: Thanks gudesh, I fixed the errors. This would been the place to use copy
+    &amp; paste.
+- id: 4028
+  author: ilan berci
+  author_email: ilan.berci@gmail.com
+  author_url: ''
+  date: '2012-04-17 16:58:55 +0200'
+  date_gmt: '2012-04-17 15:58:55 +0200'
+  content: "Fantastic article!, Thank you kindly for taking the time to write it.
+    \ I found it very informative and inline with my tinkering with Clojure.   \r\n\r\nMy
+    thoughts also concur with Andreas.  I believe coder productivity is a major factor
+    to project success.  Something that is enjoyable keeps coders motivated longer
+    and code quality usually increases as a result.  \r\n\r\nilan"
+- id: 4030
+  author: Cory
+  author_email: cory.b.giles@gmail.com
+  author_url: ''
+  date: '2012-04-17 17:48:18 +0200'
+  date_gmt: '2012-04-17 16:48:18 +0200'
+  content: Some would argue that's ALL it's good for.
+- id: 4032
+  author: Qijing
+  author_email: qjing.li@gmail.com
+  author_url: ''
+  date: '2012-04-17 18:21:56 +0200'
+  date_gmt: '2012-04-17 17:21:56 +0200'
+  content: This article is much informative.
+- id: 4033
+  author: Christian M&uuml;ller
+  author_email: chrmllr@gmail.com
+  author_url: http://twitter.com/chrmllr
+  date: '2012-04-17 20:03:29 +0200'
+  date_gmt: '2012-04-17 19:03:29 +0200'
+  content: Could you shed some light on why Clojure and not Scala, e.g.? I'm not saying
+    that Scala is better, but it would seem like more natural choice coming from Java.
+- id: 4034
+  author: Niclas Meier
+  author_email: mail@niclas-meier.de
+  author_url: http://www.niclas-meier.de
+  date: '2012-04-17 20:38:01 +0200'
+  date_gmt: '2012-04-17 19:38:01 +0200'
+  content: "Of course I can. The final decision was somewhat organisational. The guy(s)
+    who  favored Clojure was simply able to start to work earlier on our project,
+    so we got the first results in Clojure.\r\n\r\nAs a matter of fact Clojure and
+    Scala where some of the languages in the final round. We made a score card for
+    both languages and both have their strong points and their weaknesses.\r\nFrom
+    my perspective it would have been a great adventure with both languages. Starting
+    with Clojure was definetly the more radical change than using Scala. But sometimes
+    with a rough change you learn more.\r\n\r\nBut I keep also an eye on Scala. Recently
+    I read a nice book (<a href=\"http:&#47;&#47;www.amazon.com&#47;Seven-Languages-Weeks-Programming-Programmers&#47;dp&#47;193435659X&#47;ref=sr_1_1?ie=UTF8&amp;qid=1334691206&amp;sr=8-1\"
+    rel=\"nofollow\">Seven Languages in Seven Weeks<&#47;a>) about different languages.
+    I guess the next years will be interesting having all these new (and old) languages."
+- id: 4035
+  author: whomever
+  author_email: whereever@mail.com
+  author_url: ''
+  date: '2012-04-17 21:18:49 +0200'
+  date_gmt: '2012-04-17 20:18:49 +0200'
+  content: "(set var ...) is thread-local, but\r\n(def var ...) is global (not to
+    be abused for state juggling, but just for this case - dynamic code updates etc.)\r\n\r\nbindings
+    allow you to keep your sanity: while the implementation is changed for newly-started
+    computations, running code still keeps its bindings."
+- id: 4038
+  author: Daniel Jomphe
+  author_email: danieljomphe@gmail.com
+  author_url: ''
+  date: '2012-04-18 01:50:54 +0200'
+  date_gmt: '2012-04-18 00:50:54 +0200'
+  content: "For Dependency Injection, have you looked at Boing?\r\n\r\nhttps:&#47;&#47;github.com&#47;lprefontaine&#47;Boing"
+- id: 4041
+  author: Gabriel Chavez
+  author_email: gabrielchavez02@gmail.com
+  author_url: http://blog.chavezgu.com
+  date: '2012-04-18 06:45:06 +0200'
+  date_gmt: '2012-04-18 05:45:06 +0200'
+  content: I've seen people using it for machine learning. STM makes it great for
+    that.
+- id: 4045
+  author: Christian M&uuml;ller
+  author_email: chrmllr@gmail.com
+  author_url: http://twitter.com/chmllr
+  date: '2012-04-18 08:14:44 +0200'
+  date_gmt: '2012-04-18 07:14:44 +0200'
+  content: "Well, I don't know Clojure [yet], but I have already some experience with
+    Scala in private hacking. I should say that I was extremely impressed in the beginning,
+    but got disappointed in the end and that's the reason I look at Clojure now.\r\n\r\nScala
+    seems to be too raw yet: sometimes unintuitive syntax, strange collection hierarchy
+    (their strong type systems leads to unnatural data structures, like a mutable
+    LinkedList where you cannot append elements without producing a new list (wtf
+    - the list is mutable!)) + I consider several \"features\" like implicit conversion
+    rather as obstacles, especially when you try to browse documentation or to understand
+    the code. I really wonder how do people use Scala in production systems...?\r\n\r\nSo,
+    maybe your choice was right :-)"
+- id: 4359
+  author: Jacques
+  author_email: jacquesdpz@zoho.com
+  author_url: http://openlandscape.net
+  date: '2013-02-22 20:54:30 +0100'
+  date_gmt: '2013-02-22 19:54:30 +0100'
+  content: With regards to Clojure not supporting dependency injection - have you
+    looked at multimethods? They are similar.
+---
+<p>In politics you have a one hundred days period of grace. In December I started to work with <a href="http:&#47;&#47;www.clojure.org">Clojure<&#47;a>, so I guess it's time to have a clojure look. </p>
+<p>In the last couple of years I encountered a couple of different languages. At <a href="http:&#47;&#47;www.scoyo.de">scoyo<&#47;a> it was <a href="http:&#47;&#47;www.adobe.com&#47;devnet&#47;actionscript.html">ActionScript<&#47;a> and <a href="http:&#47;&#47;flex.org&#47;">Flex<&#47;a> from Adobe. I had the honor to lead a team of great engineers, but with good people you don't get close enough to the real stuff. At <a href="http:&#47;&#47;www.gamigo.de">gamigo<&#47;a> the new technology was <a href="http:&#47;&#47;www.php.net">PHP<&#47;a>. But for the last thirteen years <a href="http:&#47;&#47;www.java.com&#47;">Java<&#47;a> was always a big part of my career...<a id="more"></a><a id="more-139"></a>At my new <a href="http:&#47;&#47;www.herolabs.com">job<&#47;a> the new kid on the block is <a href="http:&#47;&#47;www.clojure.org">Clojure<&#47;a> - a LISP dialect based on Java VM. Clojure was created by <a href="http:&#47;&#47;twitter.com&#47;#!&#47;richhickey">Rich Hickey<&#47;a> and first appeared in 2007.</p>
+<p>When we started to work on our new product I said to my boss and my colleagues: In Java I know how a state of the art application has to look like, but I have no clue how to build a Clojure application. Fortunately a colleague had some Common LISP experience and already a closer look on the stack we should use. At the moment our application uses this tools and libraries. I guess I will come back to some of them later on.</p>
+<ul>
+<li><a href="https:&#47;&#47;github.com&#47;technomancy&#47;leiningen">Leiningen<&#47;a> (aka <a href="https:&#47;&#47;github.com&#47;technomancy&#47;leiningen">lein<&#47;a>) - The build and dependency managmement tool for Clojure.<&#47;li>
+<li><a href="http:&#47;&#47;webnoir.org&#47;">Noir - A nice library to build websites&#47;-services in Clojure.<&#47;a><&#47;li>
+<li><a href="https:&#47;&#47;github.com&#47;aboekhoff&#47;congomongo">CongoMongo<&#47;a> and <a href="http:&#47;&#47;www.mongodb.org&#47;">mongoDB<&#47;a> - The database driver and the database we use.<&#47;li><br />
+<&#47;ul></p>
+<p><strong>My first days with Clojure<&#47;strong><br &#47;><br />
+When you are coming from a language like Java you are used to some things like:<br &#47;><br />
+<em>Structure everything<&#47;em> - Static typing is your friend, so smack every data you have into a class. I guess most Java Enterprise application use a significant part of their computing time with copying references from one bean to another. When you use Clojure you simply don't do this and sometimes is still hard for me not to worry about it. But this gives you a whole new level of freedom, you may use e.g. <code>(merge &hellip;)<&#47;code> to simply combine two of you entities into one larger one.</p>
+<p><em>Lots of ceremony<&#47;em> - When you work in Java you create a huge amount of classes. The longer you work with Java the more inner and anonymous classes you tend to use. From these classes ninety percent are stupid bean classes with some attributes plus a setter and a getter per attribute and if you work with experts a <code>hashCode<&#47;code> and <code>equals<&#47;code> method. The remaining ten (or so) percent of you classes are services or stuff like that, who transform beans in different beans or XML, JSON, String, stuff like that. In clojure you put your structured data in maps - that's it. Due to the fact that all of closures datatypes are immutable you build some functions who do the same like the services and you are done. But instead of shuffling data from one bean to another you may use <code>(assoc &hellip;)<&#47;code>, <code>(dissoc &hellip;)<&#47;code>, <code>(select-keys &hellip;)<&#47;code> or <code>(merge &hellip;)<&#47;code> to efficiently create modified or new entities for the business logic or output generation.</p>
+<p>But I can say, you'll get used to this really fast and so I had programmed my first JSON web service very fast. But as always stuff get a little more complex &hellip;</p>
+<p>The first hurdle I had to climb where collections. Unlike the good old <code>for (&hellip;;&hellip;;&hellip;) {&hellip;}<&#47;code> loop in Java the <code>(for &hellip;)<&#47;code> list comprehension in Clojure is a beast. The first thing to do, is to realize that despite the name these two guys are totally different. Staring with the fact that the Clojure <code>(for &hellip;)<&#47;code> will be evaluated lazily, so if you want a similar evaluation behavior that the Java version you should try <code>(doseq &hellip;)<&#47;code>.<br />
+A standard pattern in Java is to define some nice result variables and then iterate with <code>for<&#47;code> through the collection changing your variables. After the loop your result is in the variable ready for further action. But you cannot do this in Clojure because you don't have variables. You have <code>let<&#47;code> bindings which look somewhat similar but they are not mutable like your datatypes.<br />
+So the <code>(for &hellip;)<&#47;code> list comprehension works a little bit different. It takes a collection and returns a collection of same or shorter length. In the function body you can compute the new value of the new collection <code>for<&#47;code> returns. You even may skip values with the <code>:when <val><&#47;code> option. A very similar function is the <code>(map &hellip;)<&#47;code> function which also maps a value to a new value and returns a lazy collection of these new values.</p>
+<p><strong>The first pitfalls<&#47;strong><br &#47;><br />
+Don't get me wrong, the Clojure collection library is great, but you need some time to get used to it. A nasty side effect was, that shortly after I though: "Yes, I am king of all collections!" you stumble over oddities like the different behavior in the <code>(conj &hellip;)<&#47;code> function. In Clojure you have these functions <code>(cons &hellip;) <&#47;code> which adds an element in front of a sequence and <code>(conj &hellip;)<&#47;code> which append an element at the end of a sequence. At least this is what I though. In fact it does append an element if the sequence is a vector, if it is a list it behaves like <code>(cons &hellip;)<&#47;code>. You can spend some hours before you find this in the doc.</p>
+<p>Another nice one - showing the power and danger - was related to Facebook and Mongo DB. We query some data from Facebook and store them into the a Mongo DB. The process only does some restructuring of the data but doesn't touch the values before we insert them into the database. To optimize the Facebook querying we switched from a hundered calls of the Facebook <a href="http:&#47;&#47;developers.facebook.com&#47;docs&#47;reference&#47;api&#47;">graph API<&#47;a> to three <a href="http:&#47;&#47;developers.facebook.com&#47;docs&#47;reference&#47;fql&#47;">FQL<&#47;a> queries. This worked really well. But Facebook has a minor difference in the results. In the graph API the IDs are strings in the FQL result set IDs are numbers. The whole process worked percieved well for a while but the I  noticed that the queries on the Mongo DB delivered not enough results. What happened? The <a href="https:&#47;&#47;github.com&#47;mmcgrana&#47;clj-json">Clojure JSON library<&#47;a> we used started to deliver numbers instead of strings and we where storing them into the Mongo DB. This worked without changing a line of code, which is nice if you want it. But the queries on the Mongo DB where still looking for strings &hellip;</p>
+<p><strong>Thinking more, coding less<&#47;strong><br &#47;><br />
+I guess this says it all. The first weeks of Clojure where unsatisfying. When coded in Java I had lots of code: Classes, XML files, etc. But in Clojure the result of the day were sometimes two functions and a macro.<br />
+First that occurred very strange to me but I realized that I had to code less to get the same result. And these two functions and the macro where very lean and elegant and solved problems worth a couple of Java classes. This was the first time I really realized the power of Clojure and the different approach.</p>
+<p><strong>Homoiconic or code is data<&#47;strong><br &#47;><br />
+If you start with Clojure you soon stumble about this whole code is data stuff. This is was homoiconic in the end means, that the syntax of your language can be written in data structures of your language. If you look at:</p>
+<pre>
+(for [i (range 1 100)] (println i))<br />
+<&#47;pre><br />
+You can read it as list with the first element <code>for<&#47;code> as symbol, a vector of further forms as second element and another list as third elements. The term for this is forms.</p>
+<p>So doing this all LISPs have an extremely small syntax. At least that is what they are telling you. But I believe that the LISP&#47;Clojure gurus (e.g. <a href="http:&#47;&#47;groups.csail.mit.edu&#47;mac&#47;users&#47;gjs&#47;">Gerald Jay Sussman<&#47;a> or <a href="http:&#47;&#47;twitter.com&#47;#!&#47;richhickey">Rich Hickey<&#47;a>) are cheating us a little bit.</p>
+<p>I guess I have to agree that the languages it self has very little syntax, but the language is shifting the complexity into the libraries. If you have a look at the <code>(for &hellip;)<&#47;code> comprehension. You saw the simple variant a few lines ago but you can also du this: </p>
+<pre>
+(for [i (range 1 100) :let [f (format "%03d" i)] :when (odd? i)] (println f))<br />
+<&#47;pre></p>
+<p>This nice little feller prints all odd numbers from 1 to 100 formatted with leading zeros. But instead of using <code>(let &hellip;)<&#47;code> or filtering the range collection I used some not so well documented options of the binding vector of the <code>(for &hellip;)<&#47;code>. So how does it work? First <code>for<&#47;code> works internally different because it is a Clojure special form, but there are several macros - yes and I also wrote some - who do the same. If you are interested you may look at the <code>(defpage &hellip;)<&#47;code> macro, which does also some black magic.<br />
+You usually use macros to do this type of things but you also may use functions (to a certain degree). So what there macros is to analyze the vector on the first position of the parameter list. In the <code>for<&#47;code> case you would iterate through the list and if you encounter a keyword (the things with <code>:<&#47;code> like <code>:let<&#47;code>) instead of a symbol you do some extra special stuff.</p>
+<p>Usually you use this to define your own <a href="http:&#47;&#47;en.wikipedia.org&#47;wiki&#47;Domain-specific_language">domain specific language (DSL)<&#47;a> in Clojure. This is what makes the solution of your problems very elegant because you make your problem related language where you can model and solve the problem very easily.</p>
+<p>But also the Clojure standard functions are using this heavily and are so hinding a lot of implicit syntax form the user who depends on documentation and examples to discover how this works. For me this was sometimes very frustrating because very helpful options (e.g. <code>:when <val><&#47;code>) are sometimes hard to find.</p>
+<p><strong>Java interoperability or it's safe as long as you are in object land<&#47;strong><br &#47;><br />
+Clojure lives (at least in the version we use) on the Java VM - there is a .NET variant and also with <a href="https:&#47;&#47;github.com&#47;clojure&#47;clojurescript">ClojureScript<&#47;a> a variant which runs as Java-Script. So if you are on the JVM you want to use some the great libraries already exist in the Java ecosystem. If you e.g. look at <a href="https:&#47;&#47;github.com&#47;mmcgrana&#47;clj-json">clj-json<&#47;a> a very fast JSON library for Clojure. It depends on the <a href="http:&#47;&#47;jackson.codehaus.org&#47;">Jackson<&#47;a> library and provides only a thin layer upon it.</p>
+<p>To use Java objects and libraries in Clojure is very simple, the messy part only begins if you want to use primitive types. These are supported but its no fun anymore. A word of warning on working with Java objects. You are leaving the zone of immutability when you work with java objects. If you get yourself a <code>java.util.Date<&#47;code> you can mutate the date like you can do it in Java and mess up big time.</p>
+<p>A very nice interop feature are <code>(deftype &hellip;)<&#47;code>, <code>(proxy &hellip;)<&#47;code> or <code>(reify &hellip;)<&#47;code>. You can use this macros to create or extend java Objects. Have a look at this:</p>
+<pre>
+(proxy [com.rabbitmq.client.DefaultConsumer] [(channel connection)]<br />
+       (handleDelivery [tag envelope prop body] (println body))<br />
+       )<br />
+<&#47;pre></p>
+<p>This tiny piece of code extends the <code>DefaultConsumer<&#47;code> and overrides the <code>handleDelivery<&#47;code> method. You can hand over the received object to a channel as a consumer and integrate directly into the Rabbit MQ Java driver.</p>
+<p><strong>Some words to the ecosystem<&#47;strong><br &#47;><br />
+Finally I want to have some word about some nice tools, library and stuff on Clojure ecosystem.</p>
+<p><em>Leiningen<&#47;em> - A very popular build tool which also offers dependency resolution. My experience with Leiningen is, that it works out of the box in most cases. Unfortunately it tends to hang once or twice a day, I guess it tries to figure out if it must update some dependencies when it's gone.</p>
+<p><em><a href="https:&#47;&#47;github.com&#47;marick&#47;Midje">Midje<&#47;a><&#47;em> - A very powerful Clojure testing framework which includes facilities to easily mock every function. This makes writing even complex tests very easy.</p>
+<p><em><a href="http:&#47;&#47;avout.io&#47;">avout<&#47;a><&#47;em> - This one is nice. It integrates tools like Clojure atoms and refs into Zookeeper (or some other coordination engines). It also offers distributed locks. Very easy to use and to build distributed<br />
+cluster coordination.</p>
+<p><em><a href="http:&#47;&#47;palletops.com&#47;">pallet<&#47;a><&#47;em> - A library who offers infrastructure management (e.g. for Amazon EC2) in clojure. You also may remotely install stuff or start and stop services. Great for dev-ops, but the documentation could be better and at the moment only Clojure 1.2 is supported. It took me some effort to get it working but when you know how to use it very powerful.</p>
+<p><strong>What suc**s?<&#47;strong><br &#47;><br />
+In this post I told you various thing about the power and beauty of Clojure but where are some things that I don't like:</p>
+<p><em>No informations on data structures<&#47;em> - I already told you that in Java you write a lot of classes to structure you data. On one hand side this is a lot of overhead, but on the other hand side its also a kind of always correct and available documentation. If you have to get into some foreign code that fetches data from a database it's very hard to discover what is the right data structure and which type are the right ones. This also makes changes very difficult.</p>
+<p><em>Dynamic invocation<&#47;em> - Functions are compiled and invoked when whey are invoked. You don't have any chance of previous checking if the function call is possible or not. This is extremely annoying when you change the signature of a function e.g. you remove a parameter. If you miss a spot where the function is called you get an error. This gets even worse if you use restructuring and variable parameter lists. You can do something like this:</p>
+<pre>
+(defn fetch [database & {:keys [:where]}] &hellip;)<br />
+<&#47;pre></p>
+<p>You can call this function with or without the <code>:where<&#47;code> parameter. This looks like this:</p>
+<pre>
+(let [all (fetch my-database)<br />
+      some (fetch my-database :where {:height {:$gt 42}})]<br />
+	&hellip;<br />
+)<br />
+<&#47;pre></p>
+<p>This is every powerful when you are creating flexible functions for DSLs but can cause very nasty side effects when you refactor these functions and change the signature.</p>
+<p><em>No bootstrapping<&#47;em> - In the Java world you have dependency injection frameworks like <a href="http:&#47;&#47;code.google.com&#47;p&#47;google-guice&#47;">Google Guice<&#47;a> or the <a href="http:&#47;&#47;www.springsource.org&#47;">Spring framework<&#47;a>. These frameworks are very helpful when you want to invert the control flow. The services you write do not have to be aware how to find the suitable services and resources. You are centralizing the bootstrapping process in one location (e.g. classes in Guice or XML in Spring).<br />
+Clojure does not offer this facilities - you don't have objects to store state, not even configuration state. The solution we choose is like a typical <a href="http:&#47;&#47;java.sun.com&#47;blueprints&#47;corej2eepatterns&#47;Patterns&#47;ServiceLocator.html">pattern<&#47;a>. One namespace provides functions to access the resources (e.g. database connections, etc.) and there functions can be called from every where.<br />
+But this has also the same drawbacks than the classical service locator. You don't have control about timing and the class is like a spider in the web called from every where.</p>
+<p><em>Clojure 1.2<&#47;em> - The current stable release is Clojure 1.3. Unfortunately some libraries we wanted to use where still based on Clojure 1.2. In general this could work but be had some strange effects on some libraries which took us a while to discover that it was a Cojure 1.2&#47;1.3 problem. A clear strategy how to deal with this isn't there yet, so all you can do is try and error.</p>
+<p><strong>Loose ends<&#47;strong><br &#47;><br />
+I didn't talk about stuff like STM (software transactional memory), Agents, Refs or Atoms. Mostly because they worked in the first place for me, or never even tried them. There are also a couple of nice library in the Clojure eco system which make your life as developer very easy. I recommend, that you have closer look yourself.</p>
+<p><strong>&hellip; and in the end<&#47;strong><br &#47;><br />
+To be honest, I had a tough couple of days in the last days. We are are in a stage where our prototype application  grows into a real world application and we want to establish structures which makes maintenance easier. Unfortunately this is not so easy as we expected.</p>
+<p>So my conclusions right now:</p>
+<ul>
+<li>Clojure is fun - I really like it to write two line functions that kick ass.<&#47;li>
+<li>Clojure does not need to hide - The eco system is growing fast and has some interesting libraries<&#47;li>
+<li>The lack of tooling is sometimes a pain. There are times where <code>clojure.tools.logging&#47;spy<&#47;code> or <code>println<&#47;code> are not enough. The absence of a debugger is sometimes a real productivity black hole.<&#47;li>
+<li>Due to the dynamic nature you'll have to write a lot of tests to be able to perform refactorings. Only with a lot of tests you can make sure that the code will work afterwards.<&#47;li>
+<li>Document your data structures to make sure that other developers have a chance to work in your code. I made some good experiences with a namespace that containes accessor functions. You can validate there functions with unit tests and the other guys in your team can easily see which values the can expect.<&#47;li><br />
+<&#47;ul></p>
+<p>Nobody can say right now, how our little adventure with Clojure will end. But for the first release of out product our backend services will be based on Clojure. The time will tell how the maintainability and the performance of the backend will develop.</p>
+<p>Right now I am not that confident that the solution will be good enough to be in service for a long time. But maybe Clojure surprises me &hellip; again &hellip; </p>
+<p><code><&#47;code></p>

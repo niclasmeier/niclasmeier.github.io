@@ -1,0 +1,160 @@
+---
+layout: post
+status: publish
+published: true
+title: The curl cheat sheet to myself
+author:
+  display_name: Niclas Meier
+  login: niclas
+  email: mail@niclas-meier.de
+  url: http://www.niclas-meier.de
+author_login: niclas
+author_email: mail@niclas-meier.de
+author_url: http://www.niclas-meier.de
+excerpt: "It has been not even a full week building REST style interfaces for the
+  <a href=\"http:&#47;&#47;www.playmakerstudio.com&#47;\">Playmaker Studio<&#47;a>
+  mobile platform and I am very annoyed of all the <code>curl<&#47;code> guides how
+  to access your REST API with <code>curl<&#47;code>. So here is my cheat sheet on
+  this topic. Be aware that the I will update this frequently.\r\n"
+wordpress_id: 109
+wordpress_url: http://www.niclas-meier.de/?p=109
+date: '2011-12-07 15:11:53 +0100'
+date_gmt: '2011-12-07 14:11:53 +0100'
+categories:
+- Technology
+- Software development
+- REST
+tags: []
+comments: []
+---
+<p>It has been not even a full week building REST style interfaces for the <a href="http:&#47;&#47;www.playmakerstudio.com&#47;">Playmaker Studio<&#47;a> mobile platform and I am very annoyed of all the <code>curl<&#47;code> guides how to access your REST API with <code>curl<&#47;code>. So here is my cheat sheet on this topic. Be aware that the I will update this frequently.<br />
+<a id="more"></a><a id="more-109"></a></p>
+<h2>Common use cases<&#47;h2></p>
+<h3>GETting data from a URL<&#47;h3><br />
+This is a very simple use case just use:</p>
+<pre class="brush:bash">
+curl https:&#47;&#47;graph.facebook.com&#47;740999649<br />
+{"id":"740999649","name":"Niclas Meier"}<br />
+<&#47;pre><br />
+<code>curl<&#47;code> will automatically use the HTTP method <code>GET<&#47;code>.</p>
+<h3>POSTting updates<&#47;h3><br />
+In the REST dictionary the HTTP method <code>POST<&#47;code> represents the verb 'update'. So updating data implies a <code>POST<&#47;code> request to an URL.</p>
+<h4>Basic<&#47;h4></p>
+<p>Let's have a look at the basics, I added some (revised &#47; half the original) debugging output by supplying the <code>-v<&#47;code> option.</p>
+<pre class="brush:bash">
+curl -v -X POST http:&#47;&#47;localhost:8080&#47;1&#47;stuff&#47;23f96c6bd4c87910c.json -d 'name=Niclas'</p>
+<p>> POST &#47;1&#47;stuff&#47;23f96c6bd4c87910c.json HTTP&#47;1.1<br />
+> Host: localhost:8080<br />
+> Accept: *&#47;*<br />
+> Content-Length: 11<br />
+> Content-Type: application&#47;x-www-form-urlencoded<br />
+><br />
+< HTTP&#47;1.1 200 OK<br />
+< Content-Type: text&#47;plain; charset=utf-8<br />
+< Content-Length: 25<br />
+<<br />
+Stuff: 23f96c6bd4c87910c<br />
+<&#47;pre><br />
+There are some options involved:</p>
+<ul>
+<li><code>-v<&#47;code> added the request&#47;response header for debugging<&#47;li>
+<li><code>-X<&#47;code> specified the request method (<code>POST<&#47;code>) to use.<&#47;li>
+<li><code>-d<&#47;code> added some data in the request (<code>POST<&#47;code>) body.<&#47;li><br />
+<&#47;ul><br />
+So the <code>'name=Niclas'<&#47;code> was sent to the server using the request body, but <code>curl<&#47;code> does not display the request body using the <code>-v<&#47;code> option.</p>
+<h4>Using a JSON body<&#47;h4><br />
+So this is nice, when you want to post key-value pairs to your server, but many applications (e.g. <a href="http:&#47;&#47;couchdb.apache.org&#47;">CouchDB<&#47;a> want to post JSON objects to the server. The initial guess</p>
+<pre class="brush:bash">
+curl -v -X POST http:&#47;&#47;localhost:8080&#47;1&#47;stuff&#47;23f96c6bd4c87910c.json -d '{"name":"Niclas"}'</p>
+<p>Stuff: 23f96c6bd4c87910c, JSON body:<br />
+<&#47;pre><br />
+does not work. That's where the content type comes in. If you post the JSON whiteout supplying the proper content type <code>curl<&#47;code> and&#47;or the server will try to use  <code>application&#47;x-www-form-urlencoded<&#47;code><a href="http:&#47;&#47;www.w3.org&#47;TR&#47;html4&#47;interact&#47;forms.html"><sup>*<&#47;sup><&#47;a> content type. This is the same content type your browser uses when submitting a form to a web server. Doesn't sound bad, does it?</p>
+<p>But it's bad because the JSON will be ignored&#47;dropped&#47;whatever and the server is unable to understand the request. To solve the problem use:</p>
+<pre class="brush:bash">
+curl -H "Content-Type: application&#47;json" -X POST  http:&#47;&#47;localhost:8080&#47;1&#47;stuff&#47;23f96c6bd4c87910c.json -d '{"name":"Niclas"}'</p>
+<p>Stuff: 23f96c6bd4c87910c, JSON body: {"name":"Niclas"}<br />
+<&#47;pre></p>
+<p>So these options are involved</p>
+<ul>
+<li><code>-X<&#47;code> specified the request method (<code>POST<&#47;code>) to use.<&#47;li>
+<li><code>-H<&#47;code> added the header <code>Content-Type: application&#47;json<&#47;code> to the request.<&#47;li>
+<li><code>-d<&#47;code> defined the data used for the request body (<code>{"name":"Niclas"}<&#47;code>).<&#47;li><br />
+<&#47;ul></p>
+<h4>A JSON file as body<&#47;h4><br />
+So far so good. But if you have huge JSON requests, you don't want to type all the JSON into the console. You may use the <code>@<&#47;code> symbol in conjunction with the <code>-d<&#47;code> option so <code>curl<&#47;code> will read the request body contents from a file. This may look like this.</p>
+<pre class="brush:bash">
+curl -H "Content-Type: application&#47;json" -X POST  http:&#47;&#47;localhost:8080&#47;1&#47;stuff&#47;23f96c6bd4c87910c.json -d @some-huge-request.json</p>
+<p>Stuff: 23f96c6bd4c87910c, JSON body: {"name":"Niclas", ..., "foo":"Bar"}<br />
+<&#47;pre></p>
+<p>A nice trick is, that if you use the <code>-d<&#47;code> with <code>@-<&#47;code>. <code>curl<&#47;code> will read the request body from the standard input. So you can do stuff like this:</p>
+<pre class="brush:bash">
+cat some-huge-request.json | curl -H "Content-Type: application&#47;json" -X POST  http:&#47;&#47;localhost:8080&#47;1&#47;stuff&#47;23f96c6bd4c87910c.json -d @-</p>
+<p>Stuff: 23f96c6bd4c87910c, JSON body: {"name":"Niclas", ..., "foo":"Bar"}<br />
+<&#47;pre></p>
+<h3>PUTting stuff<&#47;h3><br />
+Is much like <code>POST<&#47;code>, so if you can <code>POST<&#47;code> you can <code>PUT<&#47;code>. One nasty little difference is, that you don't have to supply a <code>Content-Type<&#47;code> HTTP header for <code>PUT<&#47;code>. <code>curl<&#47;code> does not use <code>application&#47;x-www-form-urlencoded<&#47;code> as content type for <code>PUT<&#47;code>. Lost an hour (or so), because I did some <code>PUT<&#47;code> stuff before switching to  <code>POST<&#47;code>.</p>
+<h2>Debugging<&#47;h2></p>
+<h4>Detailed information<&#47;h4><br />
+The key to get almost every information by supplying the <code>-v<&#47;code> option to curl.</p>
+<pre class="brush:bash">
+curl -v https:&#47;&#47;graph.facebook.com&#47;740999649</p>
+<p>* About to connect() to graph.facebook.com port 443 (#0)<br />
+*   Trying 66.220.147.38... connected<br />
+* Connected to graph.facebook.com (66.220.147.38) port 443 (#0)<br />
+* SSLv3, TLS handshake, Client hello (1):<br />
+* SSLv3, TLS handshake, Server hello (2):<br />
+* SSLv3, TLS handshake, CERT (11):<br />
+* SSLv3, TLS handshake, Server finished (14):<br />
+* SSLv3, TLS handshake, Client key exchange (16):<br />
+* SSLv3, TLS change cipher, Client hello (1):<br />
+* SSLv3, TLS handshake, Finished (20):<br />
+* SSLv3, TLS change cipher, Client hello (1):<br />
+* SSLv3, TLS handshake, Finished (20):<br />
+* SSL connection using RC4-MD5<br />
+* Server certificate:<br />
+* 	 subject: C=US; ST=California; L=Palo Alto; O=Facebook, Inc.; CN=*.facebook.com<br />
+* 	 start date: 2010-01-13 00:00:00 GMT<br />
+* 	 expire date: 2013-04-11 23:59:59 GMT<br />
+* 	 common name: *.facebook.com (matched)<br />
+* 	 issuer: C=US; O=DigiCert Inc; OU=www.digicert.com; CN=DigiCert High Assurance CA-3<br />
+* 	 SSL certificate verify ok.<br />
+> GET &#47;740999649 HTTP&#47;1.1<br />
+> User-Agent: curl&#47;7.21.4 (universal-apple-darwin11.0) libcurl&#47;7.21.4 OpenSSL&#47;0.9.8r zlib&#47;1.2.5<br />
+> Host: graph.facebook.com<br />
+> Accept: *&#47;*<br />
+><br />
+< HTTP&#47;1.1 200 OK<br />
+< Access-Control-Allow-Origin: *<br />
+< Cache-Control: private, no-cache, no-store, must-revalidate<br />
+< Content-Type: text&#47;javascript; charset=UTF-8<br />
+< ETag: "f89bfe40c87e487ae641d427c96746b226a91f3c"<br />
+< Expires: Sat, 01 Jan 2000 00:00:00 GMT<br />
+< Pragma: no-cache<br />
+< X-FB-Rev: 482216<br />
+< X-FB-Server: 10.36.50.102<br />
+< X-Cnection: close<br />
+< Date: Wed, 07 Dec 2011 13:14:19 GMT<br />
+< Content-Length: 183<br />
+<<br />
+* Connection #0 to host graph.facebook.com left intact<br />
+* Closing connection #0<br />
+* SSLv3, TLS alert, Client hello (1):<br />
+{"id":"740999649","name":"Niclas Meier","first_name":"Niclas","last_name":"Meier","link":"http:\&#47;\&#47;www.facebook.com\&#47;people\&#47;Niclas-Meier\&#47;740999649","gender":"male","locale":"de_DE"}<&#47;pre><br />
+But for may occasions that is simply too much, so check out the <code>-i<&#47;code> option.</p>
+<h4>Header information<&#47;h4><br />
+Often it's enough to get only the response headers for debugging. To get only these headers just use the <code>-i<&#47;code> option in <code>curl<&#47;code>.</p>
+<pre class="brush:bash">
+curl -i https:&#47;&#47;graph.facebook.com&#47;740999649<br />
+HTTP&#47;1.1 200 OK<br />
+Access-Control-Allow-Origin: *<br />
+Cache-Control: private, no-cache, no-store, must-revalidate<br />
+Content-Type: text&#47;javascript; charset=UTF-8<br />
+ETag: "f89bfe40c87e487ae641d427c96746b226a91f3c"<br />
+Expires: Sat, 01 Jan 2000 00:00:00 GMT<br />
+Pragma: no-cache<br />
+X-FB-Rev: 482216<br />
+X-FB-Server: 10.42.67.29<br />
+X-Cnection: close<br />
+Date: Wed, 07 Dec 2011 13:18:24 GMT<br />
+Content-Length: 183</p>
+<p>{"id":"740999649","name":"Niclas Meier","first_name":"Niclas","last_name":"Meier","link":"http:\&#47;\&#47;www.facebook.com\&#47;people\&#47;Niclas-Meier\&#47;740999649","gender":"male","locale":"de_DE"}<&#47;pre></p>

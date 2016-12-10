@@ -1,0 +1,56 @@
+---
+layout: post
+status: publish
+published: true
+title: Virtual Pages with Tapestry 5
+author:
+  display_name: admin
+  login: admin
+  email: admin@niclas-meier.de
+  url: ''
+author_login: admin
+author_email: admin@niclas-meier.de
+excerpt: |-
+  Some of you may know <a href="http:&#47;&#47;tapestry.apache.org&#47;tapestry5&#47;">Apache Tapestry 5<&#47;a> already. It's a very great framework for building web applications. In my opinion you'll won't find a framework this mature and production ready very easy. Tapestry 5 covers a wide variety of topics related to the creation of state-of-the-art web applications. So it's no surprise that <a href="http:&#47;&#47;tapestryjava.blogspot.com&#47;">Howard Lewis Ship<&#47;a> the creator&#47;founder of the Tapestry Project joined the ranks of the <a href="http:&#47;&#47;tapestryjava.blogspot.com&#47;2010&#47;03&#47;java-champion.html>"Java Champions<&#47;a>. So congratulations from here ;-)
+
+  But back on topic: One fundamental rule of the Tapestry 5 framework is, that each page has a corresponding class which contains all (java-) logic for this page. This mechanism works sole with convention over configuration and there is no exception to this rule. At least in standard Tapestry 5 ...
+wordpress_id: 62
+wordpress_url: http://nicl.net/?p=62
+date: '2010-03-29 16:13:30 +0200'
+date_gmt: '2010-03-29 15:13:30 +0200'
+categories:
+- Java
+- Tapestry
+tags: []
+comments: []
+---
+<p>Some of you may know <a href="http:&#47;&#47;tapestry.apache.org&#47;tapestry5&#47;">Apache Tapestry 5<&#47;a> already. It's a very great framework for building web applications. In my opinion you'll won't find a framework this mature and production ready very easy. Tapestry 5 covers a wide variety of topics related to the creation of state-of-the-art web applications. So it's no surprise that <a href="http:&#47;&#47;tapestryjava.blogspot.com&#47;">Howard Lewis Ship<&#47;a> the creator&#47;founder of the Tapestry Project joined the ranks of the <a href="http:&#47;&#47;tapestryjava.blogspot.com&#47;2010&#47;03&#47;java-champion.html>"Java Champions<&#47;a>. So congratulations from here ;-)</p>
+<p>But back on topic: One fundamental rule of the Tapestry 5 framework is, that each page has a corresponding class which contains all (java-) logic for this page. This mechanism works sole with convention over configuration and there is no exception to this rule. At least in standard Tapestry 5 ...<a id="more"></a><a id="more-62"></a>In the company I used to work we depended on Tapestry pretty heavy. We had created a couple very good solutions using this framework but we also had some challenges to meet. I guess they are pretty common to web based companies.</p>
+<ul>
+<li>We had to use a CMS system (<a href="http:&#47;&#47;www.magnolia-cms.com&#47;home.html">Magnolia CMS<&#47;a> in this case) to enable the marketing and non-techical guys to maintain all the content they are creating.<&#47;li>
+<li>We had to maintain a couple of so called landing pages. I guess most of the web guys know and hate them ;-) These pages are just an empty shell containing nothing more than some sightly different logos and graphics of partner companies. The also provide a nice URL in most cases like: <code>http:&#47;&#47;www.mycomany.com&#47;tv<&#47;code>, <code>&#47;mobile<&#47;code> or <code>&#47;unameit<&#47;code>. Unfortunately some of these landing pages hade some minor dynamical stuff on it. <&#47;li>
+<li>Most of this landing pages require that you are storing some (voucher) code into your application to modifier your check-out process a little bit.<&#47;li><br />
+<&#47;ul><br />
+So, now you have a couple of pages, of which you don't know when they appear - and you really don't want to know, because coordinating the timing with the marketing guys is always a mess ;-) -, with very similar structure and functionality. As a matter of fact this case should be a text book example for component reuse. but this is a case where Tapestry 5 and the convention-over-configuration thing works against us.</p>
+<p>So what do you have to do in classic Tapestry 5? Jepp you allready guessed it, you have to create a page class for each of this landing pages. Okay thanks to inheritance this class will be de-facto empty. But it is annoying to create this class. You'll have to create a version of your web application, do a QA cycle (if you want to play it right), make a deployment. So you have a lots of communication with a bunch of other departments. In a world with perfect processes you might to accept this, but I guess most of the guys out there know the situation where a junior business consultant guy stands right at your desk telling you of the nation wide TV campaign that launches tomorrow and that needs this new landing page. Maybe some of you already tried to say the 'n*' word ;-)</p>
+<p>A early solution was to introduce some Meta templates in out CMS. They were some simple HTML comments which where evaluated by a service in our web application and re-assembled via simple Tapestry pages and components. This worked quite well but brought us a bunch of issues - like template caching, dynamic contents in templates, etc. -  which are already solved in Tapestry. The solution was also pretty limited in when dynamical and statical parts should be joined together. So I took some time to evaluate a different approach:</p>
+<p><i>My first question was:<&#47;i> Is it possible to make tapestry work with pages that do not have a class as backup?</p>
+<p>I never tried this, because I figured out, that I actually didn't want to do this, and as a matter of fact, it makes the whole exercise a lot easier. What I did was to make Tapestry use a default class for pages tapestry does not know. I call this pages <i>virtual<&#47;i> pages. I'll guess you always have some minor data shared between all virtual pages, so you create on page class that Tapestry may use to serve <i>virtual<&#47;i> pages.</p>
+<p>So how you serve <i>virtual<&#47;i> pages with Tapestry 5.1? I was surprised who simple it was (after some month of the wrong track). So this is, how <i>virtual<&#47;i> pages may work:</p>
+<ol>
+<li><b>Check if the page exists<&#47;b><br &#47;>A good place to do this is the <code>ComponentClassResolver<&#47;code> with its <code>isPageName(..)<&#47;code> method. I created a <a href="http:&#47;&#47;github.com&#47;niclasmeier&#47;tapestry-virtual-pages&#47;blob&#47;master&#47;src&#47;main&#47;java&#47;net&#47;nicl&#47;virtualpages&#47;services&#47;DecoratedComponentClassResolver.java">special implementation<&#47;a> of the  <code>ComponentClassResolver<&#47;code> which decorates the Tapestry original.<&#47;li>
+<li><b>Mark the request<&#47;b><br &#47;>Mark the request as request to a virtual page. I used a <a href="http:&#47;&#47;github.com&#47;niclasmeier&#47;tapestry-virtual-pages&#47;blob&#47;master&#47;src&#47;main&#47;java&#47;net&#47;nicl&#47;virtualpages&#47;services&#47;VirtualPageData.java">dedicated service<&#47;a> with thread scope for this. You also may compute and store some data in this service.<&#47;li>
+<li><b>Alter page class loading<&#47;b><br &#47;>Adapt the loading of the component classes to load (and attach) the default class to the page. <a href="http:&#47;&#47;github.com&#47;niclasmeier&#47;tapestry-virtual-pages&#47;blob&#47;master&#47;src&#47;main&#47;java&#47;net&#47;nicl&#47;virtualpages&#47;services&#47;DecoratedComponentInstantiatorSource.java">Another decorated service<&#47;a> does the work here too.<&#47;li><br />
+<&#47;ol></p>
+<p>And voila you can deliver content for pages with no backing class, astonishing isn't it? You may look at the <a href="http:&#47;&#47;github.com&#47;niclasmeier&#47;tapestry-virtual-pages">small prototype&#47;example project at github<&#47;a> and you'll realize how simple the solution is. The prototype is a slightly modified Tapestry 5 archetype project which will serve the URL <code>http:&#47;&#47;localhost:8080&#47;About<&#47;code> as virtual page.</p>
+<p>So far, so good! But now some last words if this is a good solution at all. First I want to mention that we had an integration ready for the architecture we used, but it went - for several reasons, most non-technical - never productive.</p>
+<p>Let's talk about some oddities first:</p>
+<ul>
+<li>The URLs to address the pages do not fully comply the Tapestry behaviour. In Tapstry it does not matter if you request <code>&#47;About<&#47;code> or <code>&#47;about<&#47;code>, but the prototype only supports a simple template resolution.<&#47;li>
+<li>Some Tapestry components&#47;mechanisms won't work properly. Tapestry uses classes to compute links to pages. Always when this mechanism is used, you'll may get problems. Components like <code><t:pagelink ...><&#47;code> may not work properly because you do not have a class. Keep this in mind.<&#47;li>
+<li>Unexpected Runtime and memory behaviour. Tapestry is a very stable and production ready framework. But we are misusing it a little bit. Keep a close eye on memory consumption because every HTML page will now be a tapestry template and will be cached in the memory of your virtual machine. Some of some infrastructure components are also optimized for a (relatively) small amount of page instances.<&#47;li><br />
+<&#47;ul></p>
+<p><i>Why do I want to use Tapstry this way?<&#47;i> The first advantage is the simple creation of new pages. You'll create the <code>.tml<&#47;code> file and you are done. We used it with a CMS in the background and with some specialized CMS templates the marketing guys where able to create a bunch of landing pages without troubling an IT guy. In addition to the standard page we used some components which contained the major functions of the pages. So we were able to create instance of this virtual pages which behaved sightly different because we passed some parameters using the <code>TML<&#47;code> of the virtual page.</p>
+<p><i>Why does not offer Tapestry this mechanism?<&#47;i> First: It's a prototype! If you take a closer look you will se how limited it is. This topic as hole comes across the tapestry mailing list regularly and there are lots of pro's and con's. I don't want to discuss any of them in this blog post. But I agree with the Tapestry guys not to introduce it into the core framework.</p>
+<p>At the time I was evaluating this prototype I had some very good reasons to do so and only a few are mentioned here. But if you have a big amount of content it is seldom a good idea to generate templates which are interpreted by a dynamic framework. No matter if you use JSP, Tapestry or even PHP.</p>
+<p>I hope you'll enjoyed reading this blog post. I learned much about Tapestry 5 preparing it and evaluating my idea. If you have questions of any kind feel free to contact me ;-)</p>

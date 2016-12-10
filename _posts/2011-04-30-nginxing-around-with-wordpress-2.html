@@ -1,0 +1,37 @@
+---
+layout: post
+status: publish
+published: true
+title: nginxing around with WordPress
+author:
+  display_name: Niclas Meier
+  login: niclas
+  email: mail@niclas-meier.de
+  url: http://www.niclas-meier.de
+author_login: niclas
+author_email: mail@niclas-meier.de
+author_url: http://www.niclas-meier.de
+excerpt: |-
+  Some of you may already have noticed, that this blog uses <a href="http:&#47;&#47;www.wordpress.com">Wordpress<&#47;a> as blog software. Nothing special about that I guess. As I mentioned before in January&#47;February I moved my website from my old provide to a new one making some significant changes to the blog and it's infrastructure.
+
+  I am in the web business since a couple of years and I already worked with a couple of servers. Like most of the others I worked most with the <a href="http:&#47;&#47;httpd.apache.org">Apache web server<&#47;a>. Which is still the work horse of the internet. But recently the <a href="http:&#47;&#47;nginx.org&#47;">nginx<&#47;a> web server which is a lean, mean web serving machine. To get a little more experience with this product I decided to use it for my blog.
+wordpress_id: 91
+wordpress_url: http://www.niclas-meier.de/?p=91
+date: '2011-04-30 20:30:24 +0200'
+date_gmt: '2011-04-30 19:30:24 +0200'
+categories:
+- Webserver
+- nginx
+- Wordpress
+tags: []
+comments: []
+---
+<p>Some of you may already have noticed, that this blog uses <a href="http:&#47;&#47;www.wordpress.com">Wordpress<&#47;a> as blog software. Nothing special about that I guess. As I mentioned before in January&#47;February I moved my website from my old provide to a new one making some significant changes to the blog and it's infrastructure.</p>
+<p>I am in the web business since a couple of years and I already worked with a couple of servers. Like most of the others I worked most with the <a href="http:&#47;&#47;httpd.apache.org">Apache web server<&#47;a>. Which is still the work horse of the internet. But recently the <a href="http:&#47;&#47;nginx.org&#47;">nginx<&#47;a> web server which is a lean, mean web serving machine. To get a little more experience with this product I decided to use it for my blog.<a id="more"></a><a id="more-91"></a>The <a href="http:&#47;&#47;nginx.org&#47;">nginx<&#47;a> web server already matured already 9 years and reached recently (12. April 2011) the version 1.0.0 (congratulations on this by the way ;-) ). But there are still some major differences between the <a href="http:&#47;&#47;httpd.apache.org">Apache<&#47;a> and the <a href="http:&#47;&#47;nginx.org&#47;">nginx<&#47;a> web servers.<!--more-->For me this started when I wanted to use <a href="http:&#47;&#47;www.wordpress.com">Wordpress<&#47;a> which is build upon <a href="http:&#47;&#47;www.php.net">PHP<&#47;a>. <a href="http:&#47;&#47;www.php.net">PHP<&#47;a> itself depends on the <a href="http:&#47;&#47;en.wikipedia.org&#47;wiki&#47;Common_Gateway_Interface">common gateway interface<&#47;a> (a.k.a. <a href="http:&#47;&#47;en.wikipedia.org&#47;wiki&#47;Common_Gateway_Interface">CGI<&#47;a>) which is a <a href="http:&#47;&#47;httpd.apache.org&#47;docs&#47;2.0&#47;mod&#47;mod_cgi.html">long time component<&#47;a> of the Apache web server. Unfortunately the nginx server does not support <a href="http:&#47;&#47;en.wikipedia.org&#47;wiki&#47;Common_Gateway_Interface">CGI<&#47;a> so you'll have cover some more basics.</p>
+<p>nginx itself supports CGI using the <a href="http:&#47;&#47;en.wikipedia.org&#47;wiki&#47;FastCGI">fast CGI<&#47;a> standard. Which does actually a little bit more the plan CGI. To serve fast CGI you may use the <a href="http:&#47;&#47;wiki.nginx.org&#47;HttpFcgiModule">nginx fast CGI module<&#47;a>, so you still have access to all the scripting languages you like. But be aware that the nginx web server is known for it's fabulous capabilities serving static content.</p>
+<p>After installing nginx, a fast CGI wrapper app to execute the PHP scripts and configuring the fast CGI module, the setup of the Wordpress blog was pretty basic. I'm using a standard <a href="http:&#47;&#47;www.mysql.com">MySQL<&#47;a> database backing the Wordpress. The whole system runs on a <a href="http:&#47;&#47;www.centos.org&#47;">CentOS<&#47;a> linux. The choice of the linux distribution was also inspired by the preferred system I use at my job for almost two years. Some times it's good to stick to things you know ;-)</p>
+<p>This was the status on which the whole system ran since February. But as a few - regarding to google analytics - of you may have noticed that the whole system was very slow. This is a direct result of my stinginess, because I don't want to pay more money for my root server ;-)</p>
+<p>So today I invested some spare time to look for other optimizations and I would like to say, that I was successful. My first search lead to a Wordpress plugin to cache the pre-rendered Wordpress pages. I have not this much posting and commenting traffic, so pre-rendering the pages seemed to be a good idea. The plugin of my choice is <a href="http:&#47;&#47;wordpress.org&#47;extend&#47;plugins&#47;wp-super-cache&#47;">WP Super Cache<&#47;a> which provides a very easy to configure caching of Wordpress pages.<br />
+But I wanted to go one step further: The <a href="http:&#47;&#47;wordpress.org&#47;extend&#47;plugins&#47;wp-super-cache&#47;">WP Super Cache<&#47;a> plugin offer the possibility to bypass Wordpress and PHP completely by using compressed pre-rendered pages via <a href="http:&#47;&#47;httpd.apache.org&#47;docs&#47;2.0&#47;mod&#47;mod_rewrite.html">mod_rewrite<&#47;a>. I guess most of you noticed the problem: <a href="http:&#47;&#47;httpd.apache.org&#47;docs&#47;2.0&#47;mod&#47;mod_rewrite.html">mod_rewrite<&#47;a> is an Apache module, which does not work with the nginx server, but nginx provides a powerful <a href="http:&#47;&#47;wiki.nginx.org&#47;HttpRewriteModule">rewriting module<&#47;a> too. A very helpful <a href="http:&#47;&#47;ocaoimh.ie&#47;2009&#47;11&#47;23&#47;wordpress-nginx-wp-super-cache&#47;">blog post<&#47;a> from the WP Super Cache author helped to configure the web server. And now - at least for any anonymous user - the site is fast.</p>
+<p>It do no longer take about two seconds to return the the first bytes to the user and the page itself is compressed only approximately five kilobytes large. To speed up the perceived loading time of the page, I am using the <a href="http:&#47;&#47;wordpress.org&#47;extend&#47;plugins&#47;use-google-libraries&#47;">Use Google Libraries<&#47;a> plugin pass the delivery of standard Java Script libraries to google. So the libraries can participate on sharing between different pages and the long time expiry which is used by <a href="http:&#47;&#47;www.google.com">google<&#47;a>. The plugin <a href="http:&#47;&#47;wordpress.org&#47;extend&#47;plugins&#47;wp-minify&#47;">WP Minify<&#47;a> joins and compresses the JS and CSS used by the theme and other plugins I use, so the browser does download only a few minimized files instead of dozens of CSS and JS files.</p>
+<p>I can say, that the experiment was quite successful and after getting familiar with some peculiarities the setup process was quite easy.</p>

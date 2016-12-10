@@ -1,0 +1,40 @@
+---
+layout: post
+status: publish
+published: true
+title: Programming objectoriented - but not too much
+author:
+  display_name: Niclas Meier
+  login: niclas
+  email: mail@niclas-meier.de
+  url: http://www.niclas-meier.de
+author_login: niclas
+author_email: mail@niclas-meier.de
+author_url: http://www.niclas-meier.de
+excerpt: |+
+  Last December or January I had the opportunity to extend some software for a customer. This nice litte piece of software has the ability to track some of its usage behavior using a java HashMap.
+
+  When I was programing the class which stores the usage statistics of some major features I made a kind of stupid decision, which I am going to be blogging about right now :-)
+
+wordpress_id: 14
+wordpress_url: http://nicl.net/2008/11/09/programming-objectoriented-but-not-too-much/
+date: '2008-11-09 00:04:35 +0100'
+date_gmt: '2008-11-08 22:04:35 +0100'
+categories:
+- Java
+tags: []
+comments: []
+---
+<p>Last December or January I had the opportunity to extend some software for a customer. This nice litte piece of software has the ability to track some of its usage behavior using a java HashMap.</p>
+<p>When I was programing the class which stores the usage statistics of some major features I made a kind of stupid decision, which I am going to be blogging about right now :-)</p>
+<p><a id="more"></a><a id="more-14"></a></p>
+<p>Last December or January I had the opportunity to extend some software for a customer. This nice litte piece of software has the ability to track some of its usage behavior using a java <code>HashMap<&#47;code>.</p>
+<p>When I was programing the class which stores the usage statistics of some major features I made a kind of stupid decision, which I am going to be blogging about right now :-)</p>
+<p>It was a simple pattern in storing the relation of the usage statistics and the class in a repository. I choose not to store the statistics on the class itself, because it had nothing to do with the function of the class itself. Another aspect was the possibility to choose a different implementation of the repository later. The repository was extended with another implementation which uses an SQL database later, but the main and productive implementation is an in memory store. Which was the main origin of some of my head aches recently.</p>
+<p>The core of the in memory implementation of the usage statistics repository was the earlier mentioned <code>java.util.HashMap<&#47;code>. A quite remarkable class, if your know its bad habits. Sources of strange behavior are generally the <code>int hashCode()<&#47;code> and <code>boolean equals()<&#47;code> methods. The first one provides the hash code, which is used by the HashMap implementation. The equals methods checks the objects for equality. These two methods are connected by a quite simple rule. When two objects are equal the hash code has to be equal. And if the hash code of two instances of the same class is equal the objects have to be equal.</p>
+<p>So where is the problem with the object oriented approach so far? When I designed the interface of the usage statistics repository, I decided to use the objects instead of any given ids. I like to program in an object oriented manner, and it seemed a good choice to me to pass it directly into the HashMap for the in memory variant.<br />
+You now may think, that I forgot or did something stupid with the <code>equals<&#47;code> or <code>hashCode<&#47;code> methods. I have to disappoint you, the implementation of these two methods worked fine.</p>
+<p>But did I already mention the problem? The problem was, that the servers running out application went out ouf memory after three to four days on a quite regular basis. So we decided to fetch a heap dump of the server Java VM to analayse the problem. We realized quite fast that the <code>HashMap<&#47;code> consuming approx. 200MB memory with a size of 16 million entries may be the source of our problem :-)</p>
+<p>So what went wrong? The repository was designed to store statistics of a domain object, but it was called with different types of implementations of the domain object which decorated the initial function of the domain object class. These decorators where created on a request basis and didn't even override the <code>equals<&#47;code> or <code>hashCode<&#47;code> methods.<br />
+The database variant of the repository doesn't have the same problem, because it uses the ids of the domain object to persist the statistic informations into the SQL database. The in memory uses now the id too :-)</p>
+<p>So I refreshed a lesson learned: Its good to have a strong object oriented architecture - it's good to be able to decorate or proxy objects to enhance their functions. But it's also good to abstain from a too complicated object oriented functions sometimes.</p>
