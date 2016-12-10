@@ -3,24 +3,10 @@ layout: post
 status: publish
 published: true
 title: Eventsourcing and CQRS with Clojure and MongoDB
-author:
-  display_name: Niclas Meier
-  login: niclas
-  email: mail@niclas-meier.de
-  url: 'http://www.niclas-meier.de'
-author_login: niclas
-author_email: mail@niclas-meier.de
-author_url: 'http://www.niclas-meier.de'
-excerpt: "It was about a year ago when I stumbled about the concepts of <a href=\"http:&#47;&#47;martinfowler.com&#47;eaaDev&#47;EventSourcing.html\">event sourcing<&#47;a> and <a href=\"http:&#47;&#47;martinfowler.com&#47;bliki&#47;CQRS.html\">command query responsibility segregation<&#47;a> in a talk from <a href=\"http:&#47;&#47;codebetter.com&#47;gregyoung&#47;\">Greg Young<&#47;a> at QCon 2011 in London which I watched on <a href=\"http:&#47;&#47;www.infoq.com&#47;presentations&#47;Events-Are-Not-Just-for-Notifications\">InfoQ<&#47;a>. This challenged some things I knew for sure regarding how to store and manage data. \r\n\r\nFortunately I joined <a href=\"http:&#47;&#47;herolabs.com\">HEROLABS<&#47;a> in December 2011 and due to the fact that we where starting a brand new product, I was able to play around with these concepts. Additionally we chose <a href=\"http:&#47;&#47;www.mongodb.org&#47;\">MongoDB<&#47;a> instead of a relational database in our <a href=\"http:&#47;&#47;itunes.apple.com&#47;de&#47;app&#47;em-hero-2012&#47;id530513702?l=de&ls=1&mt=8\">first project<&#47;a> as our main database management system. <a href=\"http:&#47;&#47;www.mongodb.org&#47;\">MongoDB<&#47;a> is attributed to the NoSQL databases and is in the first place a big document (<a href=\"http:&#47;&#47;json.org\">JSON<&#47;a>&#47;<a href=\"http:&#47;&#47;bsonspec.org\">BSON<&#47;a>) store. Additionally MongoDB offers facilities to index and search the collection of documents.\r\n\r\nIn conjunction with <a href=\"http:&#47;&#47;clojure.org\">Clojure<&#47;a> your are able to build a simple a quite powerful system to use event sourcing and CQRS."
-wordpress_id: 184
-wordpress_url: 'http://www.niclas-meier.de/?p=184'
-date: '2013-01-26 23:25:24 +0100'
-date_gmt: '2013-01-26 22:25:24 +0100'
 categories:
   - Clojure
   - MongoDB
 tags: []
-comments: []
 ---
 
 It was about a year ago when I stumbled about the concepts of [event sourcing](http://martinfowler.com/eaaDev/EventSourcing.html) and [command query responsibility segregation](http://martinfowler.com/bliki/CQRS.html) in a talk from [Greg Young](http://codebetter.com/gregyoung/) at QCon 2011 in London which I watched on [InfoQ](http://www.infoq.com/presentations/Events-Are-Not-Just-for-Notifications). This challenged some things I knew for sure regarding how to store and manage data.

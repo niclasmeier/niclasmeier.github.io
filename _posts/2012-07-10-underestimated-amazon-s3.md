@@ -3,39 +3,13 @@ layout: post
 status: publish
 published: true
 title: Underestimated Amazon S3
-author:
-  display_name: Niclas Meier
-  login: niclas
-  email: mail@niclas-meier.de
-  url: http://www.niclas-meier.de
-author_login: niclas
-author_email: mail@niclas-meier.de
-author_url: http://www.niclas-meier.de
-excerpt: "The <a href=\"http://aws.amazon.com/de/s3/\">Amazon
-  Simple Storage Service (S3)</a> is the big data work horse of Amazon and one
-  of the corner stones of their cloud infrastructure. For our recent <a href=\"http://itunes.apple.com/de/app/em-hero-2012/id530513702?l=de&amp;ls=1&amp;mt=8\">project</a>
-  we received a considerable amount of game data from our data provider. At the moment
-  these file are stored in the <a href=\"http://www.mongodb.org/display/DOCS/GridFS\">GridFS</a>
-  of our Mongo DB installation, but once the data is processed we don't really need
-  these files any more, except for development or archiving purposes.\r\n\r\nAt the
-  moment we are using the <a href=\"http://aws.amazon.com/en/ec2/\">Amazon
-  Elastic Compute Cloud (EC2)</a> to run our infrastructure, so it was a logical
-  choice to evaluate the <a href=\"http://aws.amazon.com/en/s3/\">S3</a>
-  to store the received game data and I have to confess I was really underestimating
-  this service as simple file system."
-wordpress_id: 177
-wordpress_url: http://www.niclas-meier.de/?p=177
-date: '2012-07-10 21:02:49 +0200'
-date_gmt: '2012-07-10 20:02:49 +0200'
 categories:
 - Clojure
 - Amazon S3
-tags: []
-comments: []
 ---
 The [Amazon Simple Storage Service (S3)](http://aws.amazon.com/de/s3/) is the big data work horse of Amazon and one of the corner stones of their cloud infrastructure. For our recent [project](http://itunes.apple.com/de/app/em-hero-2012/id530513702?l=de&ls=1&mt=8) we received a considerable amount of game data from our data provider. At the moment these file are stored in the [GridFS](http://www.mongodb.org/display/DOCS/GridFS) of our Mongo DB installation, but once the data is processed we don't really need these files any more, except for development or archiving purposes.
 
-At the moment we are using the [Amazon Elastic Compute Cloud (EC2)](http://aws.amazon.com/en/ec2/) to run our infrastructure, so it was a logical choice to evaluate the [S3](http://aws.amazon.com/en/s3/) to store the received game data and I have to confess I was really underestimating this service as simple file system.<a id="more"></a><a id="more-177"></a>
+At the moment we are using the [Amazon Elastic Compute Cloud (EC2)](http://aws.amazon.com/en/ec2/) to run our infrastructure, so it was a logical choice to evaluate the [S3](http://aws.amazon.com/en/s3/) to store the received game data and I have to confess I was really underestimating this service as simple file system.
 
 ### Reliability
 
