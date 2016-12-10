@@ -1,0 +1,59 @@
+---
+layout: post
+status: publish
+published: true
+title: Some thoughts  about building
+author:
+  display_name: admin
+  login: admin
+  email: admin@niclas-meier.de
+  url: ''
+author_login: admin
+author_email: admin@niclas-meier.de
+excerpt: |-
+  Over the last few days I had some thoughts about building your project. I am using <a href="http://maven.apache.org">Apache Maven</a> for quite a while now. At my <a href="http://www.scoyo.de">current employer</a> we use Maven for all our components even our learn portal which is build entirely in <a href="http://www.adobe.com/products/flex/">Adobe Flex</a>, using the <a href="http://flexmojos.sonatype.org/">Flexmojos</a>.
+
+  The bottom line is that we have approximately 100 projects build with maven to build our entire platform. You don't need much imagination that we have a couple of challenges to meet.
+wordpress_id: 49
+wordpress_url: http://nicl.net/?p=49
+date: '2009-11-07 14:31:33 +0100'
+date_gmt: '2009-11-07 13:31:33 +0100'
+categories:
+- Agile software development
+- Flex-mojo
+- Maven
+tags: []
+comments: []
+---
+<p>Over the last few days I had some thoughts about building your project. I am using <a href="http://maven.apache.org">Apache Maven</a> for quite a while now. At my <a href="http://www.scoyo.de">current employer</a> we use Maven for all our components even our learn portal which is build entirely in <a href="http://www.adobe.com/products/flex/">Adobe Flex</a>, using the <a href="http://flexmojos.sonatype.org/">Flexmojos</a>.</p>
+<p>The bottom line is that we have approximately 100 projects build with maven to build our entire platform. You don't need much imagination that we have a couple of challenges to meet.<a id="more"></a><a id="more-49"></a>I started with <a href="http://maven.apache.org/maven-1.x/index.html">Maven 1</a> which was a astonishing mixture of <a href="http://ant.apache.org/">Apache Ant</a> and <a href="http://ant.apache.org/">Jelly</a>. But I never really liked the idea of executable XML. In my opinion XML is not a good programming language at all but this would be a blog posting of its own ;-)</p>
+<p>Back to to the builds. A couple of days ago a read some <a href="https://twitter.com/hlship/status/5408252622">tweets</a> from the <a href="https://twitter.com/hlship">the man behind tapestry</a> to remind me about <a href="http://buildr.apache.org/">Apache Buildr</a>. This lead to rethink some experiences I made with <a href="http://maven.apache.org">Maven2</a> in the last couple of month...</p>
+<p>This lead to certain discoveries what I started to really dislike on Maven2:</p>
+<ol>
+<li><i>The XML</i> - The <code>pom.xml</code> which defines the central project object model os getting really cluttered. When you have a small project there is almost no problem but if you have an enterprise scale project (almost evereything after an example project) the <code>pom.xml</code> is getting huge and you don't find the things you need.
+<p>Okay, there are "helpers" to maintain the <code>pom.xml</code>, but e.g. if you use <a href="http://www.eclipse.org">Eclipse</a> with a POM file the XML editor starts to parse it. If the file is no very small - even a small open source project like <a href="http://jaev.googlecode.com">jaev</a> has an approx. 140 lines <code>pom.xml</code> - it'll make Eclipse somewhat slow. If you use the <a href="http://m2eclipse.sonatype.org/">m2eclipse</a> plugin it will get even worse. The <a href="http://m2eclipse.sonatype.org/">m2eclipse</a> offers some very nice tools for POM handling and it got really good compared to the early versions. But I know a couple of guys who refuse to use it because of the negative impact on your development environment.
+</li></p>
+<li><i>Reuse by inheritance</i> - The only way (so far I know ;-) ) to reuse settings in Maven2 is POM inheritance. This works like prototypic inheritance (like in Javascript). You may define prototypic plugin settings in the parent POM and all POMs which inherit from this parent POM will use this settings as a default.
+<p>So far so good, but in most object oriented programming languages inheritance to reuse code is considered to be a bad design pattern. In Maven2 you may stumble across the same bad issues as e.g. in Java when you use the POM inheritance. As a matter of fact you may only inherit from one parent POM, so your inheritance tree will get cluttered with settings and overrides.
+</li></p>
+<li><i>Insufficient version and dependency management</i> - The dependency management is one of Maven2 strongpoints, no doubt about it. But if you really start to use it you'll get to it's limits very fast.
+<p>I guess Maven2 did some awesome pioneer work to version handling. Due to the fact that every artifact has a version number. Unfortunately the version numbers in Maven do not have an ordinal structure and admits special indicators like <code>SNAPSHOT</code>, <code>alpha</code> or <code>LATEST</code> which are adding a whole new level of complexity. So maven can't tell if a version is greater than another version, e.g. is <code>1.4-SNAPSHOT</code> greater than <code>1.4</code>?. This is very problematic when use version ranges and transitive dependencies. When you'll get a dependency from different sources (e.g. the commmons-lang library) there is always some magic involved which version you'll get. This leads to next next issue:
+</li></p>
+<li><i>The build does not break early enough.</i> - Maven2 tries to be very clever in some situations like the dependency resolution. If a problem occurs maybe a log message will be provided but the build will continue even if you have contradictory dependency declarations. So the only "hint" you'll get, if the dependency tree is faulty, are compile errors if you're lucky. If you have runtime dependencies you'll get some funny effects in your application
+</li></p>
+<li><i>No separation of concerns.</i> - The POM includes all concerns of a build like:
+<ul>
+<li>Dependency management</li>
+<li>Compiling</li>
+<li>Tesing</li>
+<li>Packaging</li>
+<li>Reporting</li>
+<li>Deployment</li>
+</ul></p>
+<p>You'll have different sections in the <code>pom.xml</code> like <code><build/></code>,  <code><dependencies/></code>, <code>
+<profiles/></code> or  <code><reporting/></code> which group the declarations a little bit. But if you take a closer look at the <code><build/></code> section you'll soon realize that it works quite different that e.g. the <code><dependencies/></code> section. In the <code><build/></code> you are more on a programming level to specify the compile and packaging issues of your build. The <code><dependencies/></code> is only declarative.</li></p>
+<li><i>Only one file</i> - To make the lack of separation more painful you are not able to break the different concerns into separate files. There are some Maven plugins which use other files like the assembly plugin, but this an exception. It would be really nice if out could include files into your <code>pom.xml</code>. This really could have positive effects on the inheritance issue too.
+</li>
+</ol></p>
+<p>Okay to straighten this a little bit. I guess the Apache Maven did some of the most innovative work on the build sector in the last few years. And I don't  consider to switch to <code>make</code> or <a href="http://ant.apache.org/">Apache Ant</a>. It makes many things a lot easier and most of my critique may be corrected in further versions ;-) I already had a peek into the Maven3 source code and I'll guess the Maven/<a href="http://www.sonatype.com/">Sonartype</a> guys will level some of this issues. I 'am very curious about Maven3 and I hope it will ease some of my pain related to the Version 2 of Maven.</p>
+<p>So, it was great to get some thoughts clear about what is important when you build a project and what are the different facets when you use a build tool. I had a first look on <a href="http://buildr.apache.org/">Apache Buildr</a> maybe I get enough stuff together to create a blog entry about it ...</p>

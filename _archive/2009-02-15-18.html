@@ -1,0 +1,51 @@
+---
+layout: post
+status: publish
+published: true
+title: Rethinking logging
+author:
+  display_name: Niclas Meier
+  login: niclas
+  email: mail@niclas-meier.de
+  url: http://www.niclas-meier.de
+author_login: niclas
+author_email: mail@niclas-meier.de
+author_url: http://www.niclas-meier.de
+excerpt: |+
+  Recently I discovered something new about a thing I am using on an every day basis like most of the software engineers. It's about logging. You may ask: "What is so exiting about logging?"
+  In my opinion logging is one of the underestimated aspects of software development. Everyone uses it, but only very few are using it right.
+  Logging is the bridge between the development phase and the operational phase in the software life cycle. If you do it right it may provide valuable informations about the inner workings of an application.
+
+  I'am using <a href="http://logging.apache.org/log4j/1.2/index.html">log4j</a> for quite a while. I am not sure when the framework was created by <a href="http://ceki.blogspot.com/">Ceki G&uuml;lc&uuml;</a>, but log4j was the straight edge for java logging in the recent years. Unfortunately it became very quite around the log4j project recently.
+
+wordpress_id: 21
+wordpress_url: http://nicl.net/2009/02/15/18/
+date: '2009-02-15 16:31:04 +0100'
+date_gmt: '2009-02-15 14:31:04 +0100'
+categories:
+- Java
+tags: []
+comments: []
+---
+<p>Recently I discovered something new about a thing I am using on an every day basis like most of the software engineers. It's about logging. You may ask: "What is so exiting about logging?"
+In my opinion logging is one of the underestimated aspects of software development. Everyone uses it, but only very few are using it right.
+Logging is the bridge between the development phase and the operational phase in the software life cycle. If you do it right it may provide valuable informations about the inner workings of an application.</p>
+<p>I'am using <a href="http://logging.apache.org/log4j/1.2/index.html">log4j</a> for quite a while. I am not sure when the framework was created by <a href="http://ceki.blogspot.com/">Ceki G&uuml;lc&uuml;</a>, but log4j was the straight edge for java logging in the recent years. Unfortunately it became very quite around the log4j project recently.</p>
+<p><a id="more"></a><a id="more-21"></a></p>
+<p>Recently I discovered something new about a thing I am using on an every day basis like most of the software engineers. It's about logging. You may ask: "What is so exiting about logging?"
+In my opinion logging is one of the underestimated aspects of software development. Everyone uses it, but only very few are using it right.
+Logging is the bridge between the development phase and the operational phase in the software life cycle. If you do it right it may provide valuable informations about the inner workings of an application.</p>
+<p>I'am using <a href="http://logging.apache.org/log4j/1.2/index.html">log4j</a> for quite a while. I am not sure when the framework was created by <a href="http://ceki.blogspot.com/">Ceki G&uuml;lc&uuml;</a>, but log4j was the straight edge for java logging for the recent years. Unfortunately it became very quite around the log4j project recently.</p>
+<p>In <a href="http://jaev.googlecode.com/">my new open source project</a> I broke some new grounds. It started with the <a href="http://www.slf4j.org/">simple logging for java (slf4j)</a>, which I used for logging. The motivation was clear, I wanted to get rid of a dedicated logger implementation and offer the possibility to integrate the output of <a href="http://jaev.googlecode.com">jaev</a> logging into the application log files (streams).
+The <a href="http://www.slf4j.org">sl4j</a> is not the first "meta" logging library. The <a href="http://commons.apache.org/logging/">commons logging</a> framework was one of the first of these frameworks. At least it's the one I came across most. The <a href="http://www.slf4j.org">sl4j</a> framework is quite new. It offers a similar functionality like the <a href="http://commons.apache.org/logging/">commons logging</a> framework, but <a href="http://www.slf4j.org/">slf4j</a> uses a static binding against the executing logging framework. It also supports various logger implementations and offers bridges from i.e. the JUL (java.util.logging) logging into the <a href="http://www.slf4j.org">sl4j</a> world. So you can integrate all logging informations in the <a href="http://www.slf4j.org">sl4j</a> infrastructure.</p>
+<p>This is quite handy if you are combining frameworks which rely on a specific logger implementation (i.e. <a href="https://facelets.dev.java.net/">facelets</a> which relies on JUL). When you use the JUL to slf4j bridge you may merge all logging streams and handle the events on you logger implementations. The <a href="http://www.slf4j.org/">slf4j</a> framework by the way was created by <a href="http://ceki.blogspot.com/">Ceki G&uuml;lc&uuml;</a>.</p>
+<p>One other word to the logger implementation. Durning my first steps with <a href="http://www.slf4j.org/">slf4j</a> I used the <a href="http://logging.apache.org/log4j/1.2/index.html">log4j</a> implementation. Which works pretty well. But in last weeks I stumbled about the <a href="http://logback.qos.ch/">logback</a> project, an offspring of <a href="http://ceki.blogspot.com/">Ceki G&uuml;lc&uuml;</a> too. The <a href="http://logback.qos.ch/">logback</a> project is a native implementation of the <a href="http://www.slf4j.org/">slf4j</a> API and it offers a state of the art logger implementation. If you are using <a href="http://logging.apache.org/log4j/1.2/index.html">log4j</a> you feel familiar in no time. But it also offers quite some interesting new features and continues the evolution which stalled at the <a href="http://logging.apache.org/log4j/1.2/index.html">log4j</a> project for quite some years. Here are some highlights:</p>
+<ul>
+<li>Configuration fully in XML via <code>logback.xml</code> and read automatically on logging initialisation.</li>
+<li>Different configuration files for productive and test environment (<code>logback.xml</code> and <code>logback-test.xml</code>).</li>
+<li>Configuration via JMX possible.</li>
+<li>Quite handy reduction of the logger name length.</li>
+<li>Provides position informations of the caller (class, line, method).</li>
+<li>Shortened stack traces of exceptions</li>
+</ul></p>
+<p>It took not very long to convince me to switch my logging implementation from <a href="http://logging.apache.org/log4j/1.2/index.html">log4j</a> to <a href="http://logback.qos.ch/">logback</a> for the <a href="http://jaev.googlecode.com/">jaev</a> project.</p>

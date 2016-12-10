@@ -1,0 +1,102 @@
+---
+layout: post
+status: publish
+published: true
+title: Creating a domain specific  language with XML-Schema and JAX-B
+author:
+  display_name: Niclas Meier
+  login: niclas
+  email: mail@niclas-meier.de
+  url: http://www.niclas-meier.de
+author_login: niclas
+author_email: mail@niclas-meier.de
+author_url: http://www.niclas-meier.de
+excerpt: "Here at <a href=\"http://www.scoyo.de\">scoyo</a> we use the
+  <a href=\"http://www.magnolia-cms.com\">Magnolia CMS</a> to manage our
+  website content. It's a quite nice tool based on the <a href=\"http://en.wikipedia.org/wiki/Content_repository_API_for_Java\">Content
+  Repository API for Java (JCR)</a> (<a href=\"http://jcp.org/en/jsr/detail?id=170\">JSR-170</a>).
+  In this blog post I want to tell you a little more about a small domain specific
+  language, which I created to manage the migration of content and configuration of
+  our <a href=\"http://www.magnolia-cms.com\">Magnolia CMS</a> installation,
+  using XML-Schema, JAX-B and the facilities of the CMS.\r\n\r\n"
+wordpress_id: 56
+wordpress_url: http://nicl.net/?p=56
+date: '2010-01-07 12:32:30 +0100'
+date_gmt: '2010-01-07 11:32:30 +0100'
+categories:
+- Domain Specific Languages
+- JAX-B
+- Magnolia CMS
+- XML
+- Java
+tags: []
+comments: []
+---
+<p>Here at <a href="http://www.scoyo.de">scoyo</a> we use the <a href="http://www.magnolia-cms.com">Magnolia CMS</a> to manage our website content. It's a quite nice tool based on the <a href="http://en.wikipedia.org/wiki/Content_repository_API_for_Java">Content Repository API for Java (JCR)</a> (<a href="http://jcp.org/en/jsr/detail?id=170">JSR-170</a>). In this blog post I want to tell you a little more about a small domain specific language, which I created to manage the migration of content and configuration of our <a href="http://www.magnolia-cms.com">Magnolia CMS</a> installation, using XML-Schema, JAX-B and the facilities of the CMS.</p>
+<p><a id="more"></a><a id="more-56"></a>To introduce you a little more into the domain. When using a CMS with some other software components you'll have a situation very similar like having a database. You have content which other (non-tech type) people manage and if you change your application sometimes you'll have to change the content - or worse the structure of the content - too. In the database world there is a <a href="http://www.amazon.com/Refactoring-Databases-Evolutionary-Database-Design/dp/0321293533/ref=sr_1_1?ie=UTF8&amp;s=books&amp;qid=1262857005&amp;sr=8-1">very nice book regarding the refactoring of databases</a>.</p>
+<p>As a solution to this issue the magnolia CMS offer some API related to the <code> info.magnolia.module.ModuleVersionHandler</code>. This API's offers the possibility to define <code>info.magnolia.module.delta.Task</code>s which may be related to specific module version. So the CMS may discover on startup time which <code>Task</code>s to execute when migrating e.g. from module version 1.4.2 to 1.4.6. This is very nice because you can load partial XML content dumps or move some content (or configuration) nodes around.</p>
+<p>Unfortunately you'll have to do this while program the update procedure in Java in your <code>ModuleVersionHandler</code>. To close this gap we introduced an own domain specific language using XML. I refer to this as DSL because it evolved to be much more like a simple XML config file, I'll hope you'll get the point later on. The inspiration gave a <a href="http://www.menzel.com/">freelance contractor</a> with very deep <a href="http://www.magnolia-cms.com">magnolia</a> know-how. So here is how I did it:</p>
+<p>First of all the <code>ModuleVersionHandler</code> has to deliver all the information defined in the XML file, so you'll have to override it. So we subclassed the <code>info.magnolia.module.DefaultModuleVersionHandler</code> to override methods like <code>getExtraInstallTasks(...)</code>. This new version handler is responsible for reading the XML file, and converting it into the objects that magnolia handles.</p>
+<p>Next step was to define a XML format. It should be an expressive format, nice to read and easy to understand. So waived of standard formats or facilities like the <a href="http://www.springframework.com/">Springframework</a> which also offers facilities to assemble object graphs from XML files. The format we choose looks like:</p>
+<pre class="brush:xml"><updates>
+	<version number="1.5.0">
+		<description>Changed implementation of header selection</description>
+		<updates>
+			<load file="config.modules.scoyo.dialogs.pageProperties.xml"/>
+			<if-exists repository="WEBSITE" node="/en">
+<then>
+				<set-property node="/de" repository="WEBSITE" property="reportSuiteIdLive"><value>test_en</value></set-property></then>
+			</if-exists></p>
+<p> 		</updates>
+	</version>
+</updates></pre></p>
+<p>which is quite nice to read and you'll have your documentation in the right place. In order to automatically process it using JAX-B you'll have to define a <a href="http://www.w3.org/XML/Schema">XML-Schema</a> which will be used to generate your Java bindings. Besides this it's always good to have a XML-Schema, I'll give you some further examples later ;-)</p>
+<p>Our schema looks like this (at least in eclipe)
+<img src="http://euve11383.vserver.de/wp-content/uploads/2010/01/Eclipse.png" border="0" alt="Eclipse.png" width="588" height="575" /></p>
+<p>We defined some elements (as seen on the left hand side). Each of this elements contains some attributes (or inner elements) which are passed to the magnolia <code>Task</code>s. The clou of this XML-Schema is the <code>Task</code> type and the <code><task /></code> element. The <code><task /></code> element is an element, which all elements defining a specific task (e.g. <code><load /></code>) must have as substitution group. Doing this allows on every place where a <code><task /></code> may be placed in XML another element of this substitution group may be placed too. In fact you'll never use <code><task /></code> but always use a specific element like <code><load /></code>. The <code>Task</code> XML type covers the XML type part of the <code><task /></code> element, when generating the XML bindings the <code>Task</code> XML type will be translated into an abstract super class for all specific types like the <code>Load</code> XML type, which defines the structure of the <code><load /></code> element.</p>
+<p>To generate the XML binding classes from the XML-Schema we use the <a href="http://maven.apache.org/">Apache Maven 2</a> plugin from <a href="http://mojo.codehaus.org/">the Codehaus mojos</a>. You may configure it like this:</p>
+<pre class="brush:xml">
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>jaxb2-maven-plugin</artifactId>
+    <version>1.2</version>
+    <executions>
+        <execution>
+        	<id>bootstrap</id></p>
+<phase>generate-sources</phase>
+            <configuration>
+            	<schemaFiles>bootstrap_1_2.xsd</schemaFiles></p>
+<packageName>...</packageName>
+            </configuration>
+            <goals>
+                <goal>xjc</goal>
+            </goals>
+        </execution>
+    </executions>
+    <configuration>
+    	<verbose>true</verbose>
+        <outputDirectory>${project.build.directory}/generated-sources/java</outputDirectory>
+        <clearOutputDir>false</clearOutputDir>
+    </configuration>
+</plugin></pre>
+The JAX-B bindings will produce nice annotated java beans which you can use in the further work. Another nice side effect of using JAX-B is, that it's blazing fast compared to use DOM or XPath processing of your XML files. Another nice effect of having an XML-Schema.</p>
+<p>So, after defining the XML-Schema and generating the JAX-B binding the next thing to do is to unmarshal the data from the XML file (or <code>InputStream</code>) which is not more than 20 lines of standard java code. Then you have an object graph representing the XML and the only thing left is to create the objects you (or the Magnolia CMS) need from this object graph. This should be an accomplishable task for a serious developer ;-)</p>
+<p>I choose to create a generic mapper interface like</p>
+<pre class="brush:java">interface TaskHandler {
+	info.magnolia.module.delta.Task create(T xmlTask);
+}</pre>
+and use a <code>java.util.Map</code> to determine the right <code>TaskHandler</code> instance for a XML task bean instance and voila I had all the <code>info.magnolia.module.delta.Task</code> instances which where defined in XML. Some glue code which does some sorting and other stuff completed my <code>ModuleVersionHandler</code>. A <code>TaskHandler</code> implementation could look like this:</p>
+<pre class="brush:java">dictionary.put(Load.class, new TaskHandler(Load.class) {
+    @Override
+    public Task create(Load xmlTask) {
+        String name = name(xmlTask, String.format("Load file '%s'.", xmlTask.getFile()));
+        String description = description(xmlTask, String.format("Load file '%s' for XML import.", xmlTask.getFile()));
+        String resource = String.format("/mgnl-bootstrap/%1$s/%2$s", moduleName, xmlTask.getFile());
+        return new BootstrapSingleResource(name, description, resource,
+                javax.jcr.ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+    }
+});</pre>
+I used an anonymous inner class an add the instance directly to the dictionary mapping all JAX-B types to the <code>TaskHandler</code>. The task handler itself uses the getter from the XML bean to create a new instance of the <code>BootstrapSingleResource</code> task. You will mention that the name of the element (<code><load /></code>) is more readable. One of the benefits using a specialized domain specific XML file.</p>
+<p>I promised to give some more advantages of having an XML-Schema. Another Advantage is that you may validate the XML (quite boring) and when you deploy the XML to a public location (e.g. a web server) you will get auto completion in Eclipse. Which is very nice!</p>
+<p>So my resume: Sometimes it's more than only nice to have a solution specific to the problem domain. With very little effort you are able to create this solution using XML-Schema and JAX-B technology stack. The result in this case was a well documented XML format which can handle various content migration scenarios. With some further levels of indirections (which were very simple) I was able to introduce programming language constructs like conditions (e.g. the <code><if-exists repository="WEBSITE" node="/en" /></code> element). I guess it's okay to call it a language now, isn't it?</p>
+<p>There are many situation where standard soultions like the <a href="http://www.springframework.com/">Springframework</a> (or the <a href="http://en.wikipedia.org/wiki/SOAP">SOAP</a> message XML format) are the best choice to quickly assemble an object graph, but when the XML (or the content in general) is object to changes made by humans it's always worth to consider a more human readable variant.</p>

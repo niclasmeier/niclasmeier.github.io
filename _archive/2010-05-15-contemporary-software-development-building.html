@@ -1,0 +1,52 @@
+---
+layout: post
+status: publish
+published: true
+title: 'Contemporary Software Development: Building'
+excerpt: |-
+  The subject of my first post of the series "Contemporary Software Development" will be building. How to build your software project is a decision which is made quite early when you start developing.
+
+  Unfortunately in a lot of projects this very important topic does not get the appreciation it deserves. On one hand side it's a very sad story of suffering and endurance. On the other hand side we are talking about a lot of wasted money.
+wordpress_id: 68
+wordpress_url: http://nicl.net/?p=68
+date: '2010-05-15 21:51:00 +0200'
+date_gmt: '2010-05-15 20:51:00 +0200'
+categories:
+- Agile software development
+- Ant
+- Buildr
+- SCM
+- Subversion
+- Java
+- Maven
+tags: []
+---
+<p>The subject of my first post of the series "Contemporary Software Development" will be building. How to build your software project is a decision which is made quite early when you start developing.</p>
+<p>Unfortunately in a lot of projects this very important topic does not get the appreciation it deserves. On one hand side it's a very sad story of suffering and endurance. On the other hand side we are talking about a lot of wasted money.<a id="more"></a><a id="more-68"></a>In my career as software engineer I experienced some different approaches to the project setup and the build process.</p>
+<p>It started with something like <code>find . -name '*.java' | xargs javac</code>, which worked quite well for the first weeks of my professional career. But with a couple of software developer working on a project <em>you want something more standardized.</em></p>
+<p>So we went on with <code>make</code><a href="http://www.gnu.org/software/make/">(*)</a>. I guess most of the software engineers will know this build tool which still is a standard tool in the Unix/Linux world. <code>make</code> is a very powerful tools but has its peculiarities also. The <code>make</code> grammar is very delicate when it comes to white spaces. I quess quite a few people sat over a broken <code>make</code> build when a <code>TAB</code> char wasted your build script.</p>
+<p>In the Java world <a href="http://ant.apache.org/">Apache Ant</a> was the successor to <code>make</code> in my career. The problem with <code>make</code> and the Java world is, that make is not really platform independent. There are <code>make</code> ports for Microsoft Windows but (at least when I made the jump from <code>make</code> to Ant) it does not work very well. So if you have a heterogeneous environment e.g. you develop on Microsoft Windows and you deploy into a Linux based cloud, <em>you want your build to to be platform independent.</em></p>
+<p>A nice story about platform independence. I did some consulting in a project for the Deutsche Bank Italy and a very large (and expensive) consulting company provided the BEA Weblogic build and setup. I am not 100% sure but I guess it was an <a href="http://ant.apache.org/">Apache Ant</a> based build. One major issue was the application server integration integration. To solve it, the complete project was placed and build in the application server which was committed in to the CVS source control management system. The delivery artifact was - of course - delivered without the application server. But this leads to another wish I have when I am using a build. <em>You want the build to credit the current  environment.</em> If you are building for your local development environment you may have different requirements concerning the built artifact as when you are creating an artifact that will be deployed on staging or productive environment.</p>
+<p>Back on memory lane: <a href="http://ant.apache.org/">Apache Ant</a> worked pretty well for some years and a couple of projects. But one thing that started to annoy me. Every project was using a slightly build setup so in the daily business there were always searching for artifacts or checking library versions.</p>
+<p>Some former colleagues introduced me to <a href="http://maven.apache.org/">Apache Maven</a>. I started with <a href="http://maven.apache.org/maven-1.x/index.html">Maven 1</a> which is a quite interesting mixture of <a href="http://ant.apache.org/">Ant</a> with a framework that offered the possibility to manipulate the Ant build file during the runtime. But <a href="http://maven.apache.org/">Apache Maven</a> had some features which I hat to get used to.
+An example is the rigid directory structure defined in a Maven build: Why do I have to follow them? I want my special directory names! But nowadays I love this structure which is equal in every project. You find your files so fast now and even in foreign project. That's another thing that you want: <em>You want your builds to follow standards, so you can get familiar with the project in very short time.</em> If you are working in the software business a couple of years, may have already realized that you will see very much projects during a professional career and standard projects and processes will make your life much more easy.</p>
+<p>Let's talk about some goodies now which modern build system offer. I will use <a href="http://maven.apache.org/">Apache Maven</a> as example but other systems like <a href="http://rake.rubyforge.org/">rake</a> or <a hef="http://buildr.apache.org/">buildr</a> offer similar functions.</p>
+<p>One thing I love/hate is dependency management. When I started with make or ant, we where committing all libraries into our CVS. Which worked quite well, in most cases you could check our the project, performed the initial build and started to work. But there where lots of minor but very nasty problems. Starting from which library version is really used to incompatibilities of the build tool version.</p>
+<p>With the <a href="http://maven.apache.org/">Apache Maven</a> dependency resolution mechanism a new area begun. If you are having one independent project the mechanism is pretty easy to use. You define the libraries you want to use in your <code>pom.xml</code> and maven takes care of the rest. Okay if you want to use libraries which are not in the maven central repository it's a little more complicated ;-)</p>
+<p>If you are having a multi module/project environment things will get messy pretty easy, but: They would also if you don't use the dependency management mechanism. You ask why? When you don't use this mechanism you'll normally have a huge monolithic project in your SCM system which will get even more difficult to manage or build. So you <em>want to have a transparent dependency management in your build system</em>. With <a href="http://ant.apache.org/ivy/">Ivy</a> for example you'll have an add-on which offers the possibility to have an dependency management when you are using <a href="http://ant.apache.org/">Ant</a>.</p>
+<p>Another goodie is release management. It's very handy if you start a build to create your release artifact and your tag (or something similar) in the SCM system of your choice. <em>You want your release process embedded in your build system, so you can perform the build when you are creating your release.</em></p>
+<p>Another important topic is testing. You <em>really want your build tool to support your testing facilities.</em> At least when you create your release or deployment artifact you want your build to automatically run your test suite.</p>
+<p>I have only one topic left in this post, that is IDE support. Unfortunately most modern IDE like <a href="http://www.eclipse.org/">Eclipe</a>, <a href="http://netbeans.org/">Netbeans</a> or <a href="http://www.jetbrains.com/idea/">Intellij IDEA</a> offer a IDE specific build. This this very comfortable if you have a small project and what to deal only with your IDE. But you'll grow really beyond this (my experience). But integration into other build tools is sometimes really poor. So you have to check how you can bridge the gap between your IDE and the build tool. E.g. the maven directory structure troubles some IDE
+standard configurations. Fortunatly more and more projects provide solutions for this.</p>
+<p>So let's have a quick resume. This is what you should want in your build system:</p>
+<ul>
+<li>standardized process</li>
+<li>platform indipendence (if your need it)</li>
+<li>credit current environment</li>
+<li>standardized structures</li>
+<li>dependency management</li>
+<li>embeddable release process (including SCM support)</li>
+<li>support of your test tools</li>
+<li>IDE support</li>
+</ul></p>
+<p>I think this list is not too lang and offers some major improvements for your daily work. So if your build process is missing some items from this list, you maybe should think about your build process. And remember: Your development resources are far to valuable to be wasted in an inefficient build process ;-)</p>
