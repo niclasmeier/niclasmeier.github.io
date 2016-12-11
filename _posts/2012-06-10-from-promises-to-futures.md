@@ -6,7 +6,6 @@ title: From Promises to Futures
 categories:
 - Java
 - Clojure
-tags: []
 ---
 This is the second post on an alternate implementation/approach to Futures and Promises on the Clojure programming language. In my [first post](/2012/06/alternate-futures-and-promises-for-clojure/) I talked a little bit about strength and weaknesses of the the actual implementation of Futures and Promises in Clojure and I defined how my Future and Clojure implementation should work.
 

@@ -7,7 +7,6 @@ categories:
 - Webserver
 - nginx
 - Wordpress
-
 ---
 Some of you may already have noticed, that this blog uses [Wordpress](http://www.wordpress.com) as blog software. Nothing special about that I guess. As I mentioned before in January/February I moved my website from my old provide to a new one making some significant changes to the blog and it's infrastructure.
 

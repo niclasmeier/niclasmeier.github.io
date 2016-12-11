@@ -3,24 +3,6 @@ layout: post
 status: publish
 published: true
 title: Bootstrapping EC2 servers with Puppet
-excerpt: >-
-  At <a href="http://herolabs.com">HEROLABS</a> we are doing sports / gaming apps
-  and one inherent characteristic is, that you have load peaks around the games.
-  I guess having load peaks is characteristic to for most gaming apps. If we take
-  a look at your EMHERO2012 app we had most server traffic during the time the
-  German national Football team played and almost no traffic in between.
-
-
-
-  What we wanted to do: Scale up our server capacity around periods of increased
-  load and scale down the rest of the time. To achieve this, we chose the Amazon
-  (AWS) cloud as deployment environment and an automated server deployment
-  process. To shed some light on the result already, after some a hard work and
-  steep learning curve, it works ;-)
-wordpress_id: 185
-wordpress_url: 'http://www.niclas-meier.de/?p=185'
-date: '2013-02-10 20:28:26 +0100'
-date_gmt: '2013-02-10 19:28:26 +0100'
 categories:
   - Technology
   - Clojure

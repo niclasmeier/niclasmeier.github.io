@@ -5,7 +5,6 @@ published: true
 title: First hundred days of Clojure
 categories:
 - Clojure
-tags: []
 ---
 In politics you have a one hundred days period of grace. In December I started to work with [Clojure](http://www.clojure.org), so I guess it's time to have a clojure look.
 

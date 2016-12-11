@@ -6,7 +6,6 @@ title: Playing around with Scala
 categories:
 - Java
 - Scala
-
 ---
 After some inspiration the last few weeks, I decided to scrape together some spare time and have a closer look at the [Scala](http://www.scala-lang.org) programming language. This was kind of overdue because I am trying to have a look at new technologies at least once a year.
 

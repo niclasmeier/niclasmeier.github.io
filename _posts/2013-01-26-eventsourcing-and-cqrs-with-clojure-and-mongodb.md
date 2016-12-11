@@ -6,7 +6,6 @@ title: Eventsourcing and CQRS with Clojure and MongoDB
 categories:
   - Clojure
   - MongoDB
-tags: []
 ---
 
 It was about a year ago when I stumbled about the concepts of [event sourcing](http://martinfowler.com/eaaDev/EventSourcing.html) and [command query responsibility segregation](http://martinfowler.com/bliki/CQRS.html) in a talk from [Greg Young](http://codebetter.com/gregyoung/) at QCon 2011 in London which I watched on [InfoQ](http://www.infoq.com/presentations/Events-Are-Not-Just-for-Notifications). This challenged some things I knew for sure regarding how to store and manage data.

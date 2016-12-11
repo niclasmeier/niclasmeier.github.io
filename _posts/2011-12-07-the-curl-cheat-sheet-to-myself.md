@@ -7,8 +7,6 @@ categories:
 - Technology
 - Software development
 - REST
-tags: []
-
 ---
 It has been not even a full week building REST style interfaces for the [Playmaker Studio](http://www.playmakerstudio.com/) mobile platform and I am very annoyed of all the `curl` guides how to access your REST API with `curl`. So here is my cheat sheet on this topic. Be aware that the I will update this frequently.
 
