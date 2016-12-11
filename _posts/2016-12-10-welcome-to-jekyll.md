@@ -1,5 +1,6 @@
 ---
 layout: post
+status: publish
 published: true
 title:  "Welcome to Jekyll!"
 date:   2016-12-10 10:06:50 +0100
